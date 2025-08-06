@@ -52,7 +52,7 @@ const PixelGame: React.FC<PixelGameProps> = ({ onScoreUpdate }) => {
       const idleFrames = 18;
       for (let i = 0; i < idleFrames; i++) {
         const img = new Image();
-        img.src = `/assets/PNG/PNG Sequences/Idle/0_Skeleton_Crusader_Idle_${String(i).padStart(3, '0')}.png`;
+        img.src = `/assets/png/png_sequences/idle/0_skeleton_crusader_idle_${String(i).padStart(3, '0')}.png`;
         animations.idle.push(img);
       }
 
@@ -60,7 +60,7 @@ const PixelGame: React.FC<PixelGameProps> = ({ onScoreUpdate }) => {
       const runningFrames = 12;
       for (let i = 0; i < runningFrames; i++) {
         const img = new Image();
-        img.src = `/assets/PNG/PNG Sequences/Running/0_Skeleton_Crusader_Running_${String(i).padStart(3, '0')}.png`;
+        img.src = `/assets/png/png_sequences/running/0_skeleton_crusader_running_${String(i).padStart(3, '0')}.png`;
         animations.running.push(img);
       }
 
@@ -68,7 +68,7 @@ const PixelGame: React.FC<PixelGameProps> = ({ onScoreUpdate }) => {
       const jumpFrames = 6;
       for (let i = 0; i < jumpFrames; i++) {
         const img = new Image();
-        img.src = `/assets/PNG/PNG Sequences/Jump Start/0_Skeleton_Crusader_Jump Start_${String(i).padStart(3, '0')}.png`;
+        img.src = `/assets/png/png_sequences/jump_start/0_skeleton_crusader_jump_start_${String(i).padStart(3, '0')}.png`;
         animations.jumping.push(img);
       }
 
@@ -76,7 +76,7 @@ const PixelGame: React.FC<PixelGameProps> = ({ onScoreUpdate }) => {
       const slashFrames = 12;
       for (let i = 0; i < slashFrames; i++) {
         const img = new Image();
-        img.src = `/assets/PNG/PNG Sequences/Slashing/0_Skeleton_Crusader_Slashing_${String(i).padStart(3, '0')}.png`;
+        img.src = `/assets/png/png_sequences/slashing/0_skeleton_crusader_slashing_${String(i).padStart(3, '0')}.png`;
         animations.slashing.push(img);
       }
 
@@ -84,7 +84,7 @@ const PixelGame: React.FC<PixelGameProps> = ({ onScoreUpdate }) => {
       const hurtFrames = 12;
       for (let i = 0; i < hurtFrames; i++) {
         const img = new Image();
-        img.src = `/assets/PNG/PNG Sequences/Hurt/0_Skeleton_Crusader_Hurt_${String(i).padStart(3, '0')}.png`;
+        img.src = `/assets/png/png_sequences/hurt/0_skeleton_crusader_hurt_${String(i).padStart(3, '0')}.png`;
         animations.hurt.push(img);
       }
     };

@@ -30,12 +30,12 @@ const GameCharacter: React.FC<GameCharacterProps> = ({
   // Get the correct folder and frame count for each action
   const getActionConfig = (action: string) => {
     const configs: { [key: string]: { folder: string; frames: number } } = {
-      idle: { folder: "Idle", frames: 18 },
-      walk: { folder: "Walking", frames: 24 },
-      run: { folder: "Running", frames: 12 },
-      attack: { folder: "Slashing", frames: 12 },
-      jump: { folder: "Jump Start", frames: 6 },
-      hurt: { folder: "Hurt", frames: 12 },
+      idle: { folder: "idle", frames: 18 },
+      walk: { folder: "walking", frames: 24 },
+      run: { folder: "running", frames: 12 },
+      attack: { folder: "slashing", frames: 12 },
+      jump: { folder: "jump_start", frames: 6 },
+      hurt: { folder: "hurt", frames: 12 },
     };
     return configs[action] || configs.idle;
   };
@@ -54,12 +54,9 @@ const GameCharacter: React.FC<GameCharacterProps> = ({
     for (let i = 0; i < config.frames && i < 6; i++) {
       // Limit to 6 frames for performance
       const frameNumber = i.toString().padStart(3, "0");
-      const spritePath = `/assets/PNG/PNG Sequences/${
+      const spritePath = `/assets/png/png_sequences/${
         config.folder
-      }/0_Skeleton_Crusader_${config.folder.replace(
-        " ",
-        "_"
-      )}_${frameNumber}.png`;
+      }/0_skeleton_crusader_${config.folder}_${frameNumber}.png`;
       spriteList.push(spritePath);
     }
 

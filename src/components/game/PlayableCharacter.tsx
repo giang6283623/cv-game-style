@@ -46,23 +46,23 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
 
   // Complete sprite configuration with all available animations
   const spriteConfig = useMemo(() => ({
-    idle: { folder: 'Idle', frames: 18, frameDelay: 6 },
-    idleBlinking: { folder: 'Idle Blinking', frames: 18, frameDelay: 6 },
-    walking: { folder: 'Walking', frames: 24, frameDelay: 3 },
-    running: { folder: 'Running', frames: 12, frameDelay: 2 },
-    jumpStart: { folder: 'Jump Start', frames: 6, frameDelay: 3 },
-    jumpLoop: { folder: 'Jump Loop', frames: 6, frameDelay: 4 },
-    falling: { folder: 'Falling Down', frames: 6, frameDelay: 4 },
-    slashing: { folder: 'Slashing', frames: 12, frameDelay: 2 },
-    runSlashing: { folder: 'Run Slashing', frames: 12, frameDelay: 2 },
-    airSlashing: { folder: 'Slashing in The Air', frames: 12, frameDelay: 2 },
-    kicking: { folder: 'Kicking', frames: 12, frameDelay: 2 },
-    throwing: { folder: 'Throwing', frames: 12, frameDelay: 3 },
-    runThrowing: { folder: 'Run Throwing', frames: 12, frameDelay: 2 },
-    airThrowing: { folder: 'Throwing in The Air', frames: 12, frameDelay: 2 },
-    sliding: { folder: 'Sliding', frames: 6, frameDelay: 3 },
-    hurt: { folder: 'Hurt', frames: 12, frameDelay: 3 },
-    dying: { folder: 'Dying', frames: 15, frameDelay: 4 }
+    idle: { folder: 'idle', frames: 18, frameDelay: 6 },
+    idleBlinking: { folder: 'idle_blinking', frames: 18, frameDelay: 6 },
+    walking: { folder: 'walking', frames: 24, frameDelay: 3 },
+    running: { folder: 'running', frames: 12, frameDelay: 2 },
+    jumpStart: { folder: 'jump_start', frames: 6, frameDelay: 3 },
+    jumpLoop: { folder: 'jump_loop', frames: 6, frameDelay: 4 },
+    falling: { folder: 'falling_down', frames: 6, frameDelay: 4 },
+    slashing: { folder: 'slashing', frames: 12, frameDelay: 2 },
+    runSlashing: { folder: 'run_slashing', frames: 12, frameDelay: 2 },
+    airSlashing: { folder: 'slashing_in_the_air', frames: 12, frameDelay: 2 },
+    kicking: { folder: 'kicking', frames: 12, frameDelay: 2 },
+    throwing: { folder: 'throwing', frames: 12, frameDelay: 3 },
+    runThrowing: { folder: 'run_throwing', frames: 12, frameDelay: 2 },
+    airThrowing: { folder: 'throwing_in_the_air', frames: 12, frameDelay: 2 },
+    sliding: { folder: 'sliding', frames: 6, frameDelay: 3 },
+    hurt: { folder: 'hurt', frames: 12, frameDelay: 3 },
+    dying: { folder: 'dying', frames: 15, frameDelay: 4 }
   } as Record<ActionType, { folder: string; frames: number; frameDelay?: number }>), []);
 
   // Load sprites for current action
@@ -72,15 +72,11 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
     
     const spriteList: string[] = [];
     
-    // The folder name and file name both use the same spacing
-    // e.g., Folder: "Jump Start" -> File: "0_Skeleton_Crusader_Jump Start_000.png"
-    const filePrefix = config.folder;
-    
     // Load all frames for smooth animation
     const framesToLoad = config.frames;
     for (let i = 0; i < framesToLoad; i++) {
       const frameNumber = i.toString().padStart(3, '0');
-      const spritePath = `/assets/PNG/PNG Sequences/${config.folder}/0_Skeleton_Crusader_${filePrefix}_${frameNumber}.png`;
+      const spritePath = `/assets/png/png_sequences/${config.folder}/0_skeleton_crusader_${config.folder}_${frameNumber}.png`;
       spriteList.push(spritePath);
     }
     
