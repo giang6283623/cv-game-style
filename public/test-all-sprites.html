@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Sprites Animation Test</title>
+    <style>
+        body { 
+            background: #1a1a1a; 
+            padding: 20px; 
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        .animation-container {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #444;
+            text-align: center;
+            vertical-align: top;
+        }
+        .animation-container h3 {
+            margin: 0 0 10px 0;
+            color: #4CAF50;
+        }
+        canvas {
+            background: #2a2a2a;
+            border: 1px solid #555;
+        }
+        .status {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .loading { color: #ff9800; }
+        #summary {
+            padding: 20px;
+            background: #2a2a2a;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Complete Sprite Animation Test</h1>
+    <div id="summary">
+        <h2>Loading Summary</h2>
+        <div id="status-summary">Initializing...</div>
+    </div>
+    <div id="animations"></div>
+
+    <script>
+        const animations = [
+            { name: 'idle', frames: 18 },
+            { name: 'idle_blinking', frames: 18 },
+            { name: 'walking', frames: 24 },
+            { name: 'running', frames: 12 },
+            { name: 'jumping_start', folder: 'jump_start', frames: 6 },
+            { name: 'jumping_loop', folder: 'jump_loop', frames: 6 },
+            { name: 'falling_down', frames: 6 },
+            { name: 'sliding', frames: 6 },
+            { name: 'slashing', frames: 12 },
+            { name: 'slashing_in_the_air', frames: 12 },
+            { name: 'run_slashing', frames: 12 },
+            { name: 'throwing', frames: 12 },
+            { name: 'throwing_in_the_air', frames: 12 },
+            { name: 'run_throwing', frames: 12 },
+            { name: 'kicking', frames: 12 },
+            { name: 'hurt', frames: 12 },
+            { name: 'dying', frames: 15 }
+        ];
+
+        let totalFrames = 0;
+        let loadedFrames = 0;
+        let failedFrames = 0;
+
+        class SpriteAnimation {
+            constructor(name, folder, frameCount) {
+                this.name = name;
+                this.folder = folder;
+                this.frameCount = frameCount;
+                this.frames = [];
+                this.currentFrame = 0;
+                this.loaded = false;
+                this.canvas = null;
+                this.ctx = null;
+                this.animationId = null;
+                this.statusEl = null;
+            }
+
+            init(container) {
+                // Create canvas
+                this.canvas = document.createElement('canvas');
+                this.canvas.width = 200;
+                this.canvas.height = 200;
+                this.ctx = this.canvas.getContext('2d');
+                container.appendChild(this.canvas);
+
+                // Create status element
+                this.statusEl = document.createElement('div');
+                this.statusEl.className = 'status loading';
+                this.statusEl.textContent = 'Loading...';
+                container.appendChild(this.statusEl);
+
+                // Load frames
+                this.loadFrames();
+            }
+
+            loadFrames() {
+                let loadedCount = 0;
+                let errorCount = 0;
+
+                for (let i = 0; i < this.frameCount; i++) {
+                    const img = new Image();
+                    const frameNumber = String(i).padStart(3, '0');
+                    img.src = `/assets/png/png_sequences/${this.folder}/0_skeleton_crusader_${this.folder}_${frameNumber}.png`;
+                    
+                    img.onload = () => {
+                        loadedCount++;
+                        loadedFrames++;
+                        updateSummary();
+                        
+                        if (loadedCount === this.frameCount) {
+                            this.loaded = true;
+                            this.statusEl.className = 'status success';
+                            this.statusEl.textContent = `✓ All ${this.frameCount} frames loaded`;
+                            this.startAnimation();
+                        }
+                    };
+                    
+                    img.onerror = () => {
+                        errorCount++;
+                        failedFrames++;
+                        updateSummary();
+                        
+                        this.statusEl.className = 'status error';
+                        this.statusEl.textContent = `✗ Failed: ${errorCount}/${this.frameCount} frames`;
+                        console.error(`Failed to load: ${img.src}`);
+                    };
+                    
+                    this.frames.push(img);
+                }
+            }
+
+            startAnimation() {
+                if (!this.loaded) return;
+                
+                const animate = () => {
+                    // Clear canvas
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    
+                    // Draw current frame
+                    const img = this.frames[this.currentFrame];
+                    if (img.complete && img.naturalHeight !== 0) {
+                        // Scale to fit canvas
+                        const scale = Math.min(
+                            this.canvas.width / img.width,
+                            this.canvas.height / img.height
+                        ) * 0.8;
+                        
+                        const width = img.width * scale;
+                        const height = img.height * scale;
+                        const x = (this.canvas.width - width) / 2;
+                        const y = (this.canvas.height - height) / 2;
+                        
+                        this.ctx.drawImage(img, x, y, width, height);
+                    }
+                    
+                    // Update frame
+                    this.currentFrame = (this.currentFrame + 1) % this.frameCount;
+                    
+                    // Continue animation
+                    this.animationId = requestAnimationFrame(animate);
+                };
+                
+                // Start animation with delay based on animation speed
+                setInterval(() => {
+                    if (this.animationId) {
+                        cancelAnimationFrame(this.animationId);
+                    }
+                    animate();
+                }, 1000 / 12); // 12 FPS
+            }
+        }
+
+        function updateSummary() {
+            const summary = document.getElementById('status-summary');
+            const percentage = Math.round((loadedFrames / totalFrames) * 100);
+            summary.innerHTML = `
+                <div>Total Animations: ${animations.length}</div>
+                <div>Total Frames: ${totalFrames}</div>
+                <div class="success">Loaded Frames: ${loadedFrames}</div>
+                <div class="error">Failed Frames: ${failedFrames}</div>
+                <div>Progress: ${percentage}%</div>
+                ${loadedFrames === totalFrames ? '<div class="success"><strong>✓ All sprites loaded successfully!</strong></div>' : ''}
+            `;
+        }
+
+        // Initialize all animations
+        window.onload = () => {
+            const container = document.getElementById('animations');
+            
+            // Calculate total frames
+            totalFrames = animations.reduce((sum, anim) => sum + anim.frames, 0);
+            
+            animations.forEach(anim => {
+                const div = document.createElement('div');
+                div.className = 'animation-container';
+                
+                const title = document.createElement('h3');
+                title.textContent = anim.name.replace(/_/g, ' ').toUpperCase();
+                div.appendChild(title);
+                
+                const folder = anim.folder || anim.name;
+                const animation = new SpriteAnimation(anim.name, folder, anim.frames);
+                animation.init(div);
+                
+                container.appendChild(div);
+            });
+        };
+    </script>
+</body>
+</html>

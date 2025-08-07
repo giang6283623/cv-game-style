@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sprite Test</title>
+    <style>
+        body { background: #333; padding: 20px; }
+        img { border: 1px solid white; margin: 10px; }
+        .status { color: white; font-family: monospace; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1 style="color: white;">Sprite Loading Test</h1>
+    <div class="status" id="status">Testing sprite loading...</div>
+    
+    <h2 style="color: white;">Idle Animation</h2>
+    <img id="idle" src="/assets/png/png_sequences/idle/0_skeleton_crusader_idle_000.png" width="200">
+    
+    <h2 style="color: white;">Hurt Animation</h2>
+    <img id="hurt" src="/assets/png/png_sequences/hurt/0_skeleton_crusader_hurt_001.png" width="200">
+    
+    <h2 style="color: white;">Idle Blinking</h2>
+    <img id="blink" src="/assets/png/png_sequences/idle_blinking/0_skeleton_crusader_idle_blinking_001.png" width="200">
+    
+    <script>
+        let loaded = 0;
+        let total = 3;
+        
+        function checkImage(id) {
+            const img = document.getElementById(id);
+            img.onload = function() {
+                loaded++;
+                document.getElementById('status').innerHTML += `<br>✓ ${id} loaded successfully`;
+                if (loaded === total) {
+                    document.getElementById('status').innerHTML += '<br><strong>All sprites loaded!</strong>';
+                }
+            };
+            img.onerror = function() {
+                document.getElementById('status').innerHTML += `<br>✗ ${id} failed to load`;
+            };
+        }
+        
+        checkImage('idle');
+        checkImage('hurt');
+        checkImage('blink');
+    </script>
+</body>
+</html>

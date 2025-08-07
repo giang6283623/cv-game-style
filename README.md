@@ -203,7 +203,73 @@ Edit the CSS variables in `src/styles/game.css`:
 - **Vercel:** `vercel deploy`
 - **Netlify:** Drag and drop `dist/` folder
 - **GitHub Pages:** Use GitHub Actions workflow
-- **Custom Server:** Serve the `dist/` folder with any static server
+- **Custom Server:** See detailed deployment guide below
+
+## 🚀 Server Deployment Guide
+
+### Quick Setup for Ubuntu/Nginx
+
+For a complete step-by-step deployment guide, see [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
+
+#### Key Configuration Points:
+
+1. **Nginx Configuration** (see `nginx.conf.example`):
+   - Proper asset aliasing for `/assets/` directory
+   - CORS headers for sprite animations
+   - Long-term caching for performance
+   - Gzip compression (excluding images)
+
+2. **Critical for Sprite Animations**:
+   ```nginx
+   location /assets/ {
+       alias /path/to/your/app/assets/;
+       expires 1y;
+       add_header Cache-Control "public, immutable, max-age=31536000" always;
+       add_header Access-Control-Allow-Origin "*" always;
+   }
+   ```
+
+3. **Test Your Sprites**:
+   - `/test-sprites.html` - Basic sprite loading test
+   - `/test-all-sprites.html` - Complete animation test
+
+### Troubleshooting Sprites
+
+If sprite animations aren't working:
+
+1. **Clear Browser Cache**: `Ctrl+F5` (Windows/Linux) or `Cmd+Shift+R` (Mac)
+2. **Check Nginx Error Logs**: `sudo tail -f /var/log/nginx/error.log`
+3. **Verify File Permissions**: Files should be readable by www-data
+4. **Test Direct Access**: Try accessing a sprite directly:
+   ```
+   https://yourdomain.com/assets/png/png_sequences/idle/0_skeleton_crusader_idle_000.png
+   ```
+
+## 🎮 Sprite Animations
+
+The game includes 17 different character animations with a total of 207 sprite frames:
+
+| Animation | Frames | Description |
+|-----------|--------|-------------|
+| idle | 18 | Default standing animation |
+| idle_blinking | 18 | Idle with blinking effect |
+| walking | 24 | Walking animation |
+| running | 12 | Running animation |
+| jump_start | 6 | Beginning of jump |
+| jump_loop | 6 | Mid-air loop |
+| falling_down | 6 | Falling animation |
+| sliding | 6 | Sliding on ground |
+| slashing | 12 | Sword attack |
+| slashing_in_the_air | 12 | Aerial attack |
+| run_slashing | 12 | Running attack |
+| throwing | 12 | Throwing projectile |
+| throwing_in_the_air | 12 | Aerial throw |
+| run_throwing | 12 | Running throw |
+| kicking | 12 | Kick attack |
+| hurt | 12 | Damage reaction |
+| dying | 15 | Death animation |
+
+All sprites are located in `public/assets/png/png_sequences/[animation_name]/`
 
 ## 🤝 Contributing
 
