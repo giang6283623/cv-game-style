@@ -1,0 +1,94 @@
+# Nginx configuration for CV Game Style app - giangbv.camera.ai.vn
+# This configuration is ready for Let's Encrypt SSL installation
+# Place this file in /etc/nginx/sites-available/ or /etc/nginx/conf.d/
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name giangbv.camera.ai.vn;
+    
+    # Document root - adjust this path to match your deployment location
+    root /var/www/cv-game-style;
+    index index.html;
+    
+    # Gzip compression for text-based files only
+    # IMPORTANT: Do NOT compress PNG images to preserve pixel art quality
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types text/plain text/css text/xml text/javascript application/javascript application/xml+rss application/json image/svg+xml;
+    
+    # Specific handling for PNG sprite sequences - CRITICAL FOR PIXEL ART
+    location /assets/png/ {
+        # Disable gzip for pixel art images
+        gzip off;
+        
+        # Long cache for sprite images
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+        
+        # Ensure correct MIME type
+        add_header Content-Type "image/png";
+        
+        # Allow CORS for assets
+        add_header Access-Control-Allow-Origin *;
+        
+        # Try to serve the file directly
+        try_files $uri $uri/ =404;
+    }
+    
+    # Handle other static assets
+    location ~* \.(jpg|jpeg|gif|ico|svg)$ {
+        expires 1y;
+        add_header Cache-Control "public, max-age=31536000";
+        gzip off;  # Disable compression for images
+    }
+    
+    # CSS and JavaScript files
+    location ~* \.(css|js)$ {
+        expires 7d;
+        add_header Cache-Control "public, max-age=604800";
+        gzip on;  # Enable compression for CSS/JS
+    }
+    
+    # Font files
+    location ~* \.(woff|woff2|ttf|otf|eot)$ {
+        expires 1y;
+        add_header Cache-Control "public, max-age=31536000";
+        add_header Access-Control-Allow-Origin *;
+    }
+    
+    # Handle client-side routing for React
+    location / {
+        try_files $uri $uri/ /index.html;
+        
+        # Security headers
+        add_header X-Frame-Options "SAMEORIGIN" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-XSS-Protection "1; mode=block" always;
+        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    }
+    
+    # Deny access to hidden files
+    location ~ /\. {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+    
+    # Let's Encrypt challenge location (for when you install SSL)
+    location ^~ /.well-known/acme-challenge/ {
+        allow all;
+        root /var/www/cv-game-style;
+    }
+    
+    # Error pages
+    error_page 404 /404.html;
+    error_page 500 502 503 504 /50x.html;
+    
+    # Logging
+    access_log /var/log/nginx/giangbv.camera.ai.vn.access.log;
+    error_log /var/log/nginx/giangbv.camera.ai.vn.error.log;
+}
+
+# After installing Let's Encrypt, it will add SSL configuration here automatically

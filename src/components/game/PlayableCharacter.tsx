@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 interface PlayableCharacterProps {
   containerRef?: React.RefObject<HTMLDivElement>;
@@ -7,33 +7,33 @@ interface PlayableCharacterProps {
   speed?: number;
 }
 
-type ActionType = 
-  | 'idle' 
-  | 'idleBlinking'
-  | 'walking' 
-  | 'running' 
-  | 'jumpStart'
-  | 'jumpLoop'
-  | 'falling'
-  | 'slashing' 
-  | 'runSlashing'
-  | 'airSlashing'
-  | 'kicking'
-  | 'throwing'
-  | 'runThrowing'
-  | 'airThrowing'
-  | 'sliding'
-  | 'hurt'
-  | 'dying';
+type ActionType =
+  | "idle"
+  | "idleBlinking"
+  | "walking"
+  | "running"
+  | "jumpStart"
+  | "jumpLoop"
+  | "falling"
+  | "slashing"
+  | "runSlashing"
+  | "airSlashing"
+  | "kicking"
+  | "throwing"
+  | "runThrowing"
+  | "airThrowing"
+  | "sliding"
+  | "hurt"
+  | "dying";
 
 const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
   containerRef,
   size = 80,
-  speed = 2
+  speed = 2,
 }) => {
   const [position, setPosition] = useState({ x: 200, y: 200 });
-  const [direction, setDirection] = useState<'left' | 'right'>('right');
-  const [action, setAction] = useState<ActionType>('idle');
+  const [direction, setDirection] = useState<"left" | "right">("right");
+  const [action, setAction] = useState<ActionType>("idle");
   const [currentFrame, setCurrentFrame] = useState(0);
   const [sprites, setSprites] = useState<string[]>([]);
   const [isJumping, setIsJumping] = useState(false);
@@ -45,41 +45,56 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
   const idleTimer = useRef<NodeJS.Timeout | null>(null);
 
   // Complete sprite configuration with all available animations
-  const spriteConfig = useMemo(() => ({
-    idle: { folder: 'idle', frames: 18, frameDelay: 6 },
-    idleBlinking: { folder: 'idle_blinking', frames: 18, frameDelay: 6 },
-    walking: { folder: 'walking', frames: 24, frameDelay: 3 },
-    running: { folder: 'running', frames: 12, frameDelay: 2 },
-    jumpStart: { folder: 'jump_start', frames: 6, frameDelay: 3 },
-    jumpLoop: { folder: 'jump_loop', frames: 6, frameDelay: 4 },
-    falling: { folder: 'falling_down', frames: 6, frameDelay: 4 },
-    slashing: { folder: 'slashing', frames: 12, frameDelay: 2 },
-    runSlashing: { folder: 'run_slashing', frames: 12, frameDelay: 2 },
-    airSlashing: { folder: 'slashing_in_the_air', frames: 12, frameDelay: 2 },
-    kicking: { folder: 'kicking', frames: 12, frameDelay: 2 },
-    throwing: { folder: 'throwing', frames: 12, frameDelay: 3 },
-    runThrowing: { folder: 'run_throwing', frames: 12, frameDelay: 2 },
-    airThrowing: { folder: 'throwing_in_the_air', frames: 12, frameDelay: 2 },
-    sliding: { folder: 'sliding', frames: 6, frameDelay: 3 },
-    hurt: { folder: 'hurt', frames: 12, frameDelay: 3 },
-    dying: { folder: 'dying', frames: 15, frameDelay: 4 }
-  } as Record<ActionType, { folder: string; frames: number; frameDelay?: number }>), []);
+  const spriteConfig = useMemo(
+    () =>
+      ({
+        idle: { folder: "idle", frames: 18, frameDelay: 6 },
+        idleBlinking: { folder: "idle_blinking", frames: 18, frameDelay: 6 },
+        walking: { folder: "walking", frames: 24, frameDelay: 3 },
+        running: { folder: "running", frames: 12, frameDelay: 2 },
+        jumpStart: { folder: "jump_start", frames: 6, frameDelay: 3 },
+        jumpLoop: { folder: "jump_loop", frames: 6, frameDelay: 4 },
+        falling: { folder: "falling_down", frames: 6, frameDelay: 4 },
+        slashing: { folder: "slashing", frames: 12, frameDelay: 2 },
+        runSlashing: { folder: "run_slashing", frames: 12, frameDelay: 2 },
+        airSlashing: {
+          folder: "slashing_in_the_air",
+          frames: 12,
+          frameDelay: 2,
+        },
+        kicking: { folder: "kicking", frames: 12, frameDelay: 2 },
+        throwing: { folder: "throwing", frames: 12, frameDelay: 3 },
+        runThrowing: { folder: "run_throwing", frames: 12, frameDelay: 2 },
+        airThrowing: {
+          folder: "throwing_in_the_air",
+          frames: 12,
+          frameDelay: 2,
+        },
+        sliding: { folder: "sliding", frames: 6, frameDelay: 3 },
+        hurt: { folder: "hurt", frames: 12, frameDelay: 3 },
+        dying: { folder: "dying", frames: 15, frameDelay: 4 },
+      } as Record<
+        ActionType,
+        { folder: string; frames: number; frameDelay?: number }
+      >),
+    []
+  );
 
   // Load sprites for current action
   useEffect(() => {
     const config = spriteConfig[action];
     if (!config) return;
-    
+
     const spriteList: string[] = [];
-    
+
     // Load all frames for smooth animation
     const framesToLoad = config.frames;
     for (let i = 0; i < framesToLoad; i++) {
-      const frameNumber = i.toString().padStart(3, '0');
+      const frameNumber = i.toString().padStart(3, "0");
       const spritePath = `/assets/png/png_sequences/${config.folder}/0_skeleton_crusader_${config.folder}_${frameNumber}.png`;
       spriteList.push(spritePath);
     }
-    
+
     setSprites(spriteList);
     setCurrentFrame(0);
   }, [action, spriteConfig]);
@@ -87,11 +102,11 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
   // Sprite animation frame cycling with variable speed
   useEffect(() => {
     if (sprites.length <= 1) return;
-    
+
     const config = spriteConfig[action];
     const frameDelay = config?.frameDelay || 4;
     let frameCounter = 0;
-    
+
     const animate = () => {
       frameCounter++;
       if (frameCounter % frameDelay === 0) {
@@ -99,7 +114,7 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
       }
       animationRef.current = requestAnimationFrame(animate);
     };
-    
+
     animationRef.current = requestAnimationFrame(animate);
 
     return () => {
@@ -111,18 +126,18 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
 
   // Set idle blinking randomly
   useEffect(() => {
-    if (action === 'idle') {
+    if (action === "idle") {
       const randomBlink = () => {
-        if (action === 'idle' && Math.random() > 0.7) {
-          setAction('idleBlinking');
+        if (action === "idle" && Math.random() > 0.7) {
+          setAction("idleBlinking");
           setTimeout(() => {
             if (!isMoving.current && !isAttacking && !isJumping) {
-              setAction('idle');
+              setAction("idle");
             }
           }, 1000);
         }
       };
-      
+
       idleTimer.current = setInterval(randomBlink, 3000);
       return () => {
         if (idleTimer.current) clearInterval(idleTimer.current);
@@ -134,129 +149,151 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Prevent space from scrolling page
-      if (e.key === ' ') {
+      if (e.key === " ") {
         e.preventDefault();
       }
-      
+
       const key = e.key.toLowerCase();
       keysPressed.current.add(key);
-      
+
       // Handle different attacks
-      if (key === 'x' && !isAttacking) {
+      if (key === "x" && !isAttacking) {
         setIsAttacking(true);
-        const running = keysPressed.current.has('shift');
-        
+        const running = keysPressed.current.has("shift");
+
         if (isJumping) {
-          setAction('airSlashing');
+          setAction("airSlashing");
         } else if (running && isMoving.current) {
-          setAction('runSlashing');
+          setAction("runSlashing");
         } else {
-          setAction('slashing');
+          setAction("slashing");
         }
-        
+
         setTimeout(() => {
           setIsAttacking(false);
           updateActionBasedOnState();
         }, 600);
       }
-      
+
       // Handle kick
-      if (key === 'c' && !isAttacking) {
+      if (key === "c" && !isAttacking) {
         setIsAttacking(true);
-        setAction('kicking');
+        setAction("kicking");
         setTimeout(() => {
           setIsAttacking(false);
           updateActionBasedOnState();
         }, 600);
       }
-      
+
       // Handle throw
-      if (key === 'v' && !isAttacking) {
+      if (key === "v" && !isAttacking) {
         setIsAttacking(true);
-        const running = keysPressed.current.has('shift');
-        
+        const running = keysPressed.current.has("shift");
+
         if (isJumping) {
-          setAction('airThrowing');
+          setAction("airThrowing");
         } else if (running && isMoving.current) {
-          setAction('runThrowing');
+          setAction("runThrowing");
         } else {
-          setAction('throwing');
+          setAction("throwing");
         }
-        
+
         setTimeout(() => {
           setIsAttacking(false);
           updateActionBasedOnState();
         }, 700);
       }
-      
+
       // Handle slide - check for any movement key pressed
-      const movementKeys = ['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'];
-      const hasMovementKey = movementKeys.some(k => keysPressed.current.has(k));
-      
-      if (key === 'z' && hasMovementKey && !isJumping && !isAttacking) {
-        setAction('sliding');
+      const movementKeys = [
+        "w",
+        "a",
+        "s",
+        "d",
+        "arrowup",
+        "arrowdown",
+        "arrowleft",
+        "arrowright",
+      ];
+      const hasMovementKey = movementKeys.some((k) =>
+        keysPressed.current.has(k)
+      );
+
+      if (key === "z" && hasMovementKey && !isJumping && !isAttacking) {
+        setAction("sliding");
         setTimeout(() => {
           updateActionBasedOnState();
         }, 400);
       }
-      
+
       // Handle jump
-      if ((key === ' ' || key === 'j') && !isJumping) {
+      if ((key === " " || key === "j") && !isJumping) {
         e.preventDefault();
         setIsJumping(true);
-        setAction('jumpStart');
-        
+        setAction("jumpStart");
+
         // Transition to jump loop
         setTimeout(() => {
           if (isJumping) {
-            setAction('jumpLoop');
+            setAction("jumpLoop");
           }
         }, 300);
-        
+
         // Landing
         setTimeout(() => {
           setIsJumping(false);
-          setAction('falling');
+          setAction("falling");
           setTimeout(() => {
             updateActionBasedOnState();
           }, 200);
         }, 800);
       }
     };
-    
+
     const updateActionBasedOnState = () => {
       if (isAttacking || isJumping) return;
-      
-      const running = keysPressed.current.has('shift');
+
+      const running = keysPressed.current.has("shift");
       if (isMoving.current) {
-        setAction(running ? 'running' : 'walking');
+        setAction(running ? "running" : "walking");
       } else {
-        setAction('idle');
+        setAction("idle");
       }
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
       keysPressed.current.delete(key);
-      
+
       // Check if still moving
-      const movementKeys = ['w', 'a', 's', 'd', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright'];
-      const hasMovementKey = movementKeys.some(k => keysPressed.current.has(k));
-      
+      const movementKeys = [
+        "w",
+        "a",
+        "s",
+        "d",
+        "arrowup",
+        "arrowdown",
+        "arrowleft",
+        "arrowright",
+      ];
+      const hasMovementKey = movementKeys.some((k) =>
+        keysPressed.current.has(k)
+      );
+
       if (!hasMovementKey) {
         isMoving.current = false;
         if (!isAttacking && !isJumping) {
-          setAction('idle');
+          setAction("idle");
         }
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
     };
   }, [action, isAttacking, isJumping]);
 
@@ -270,28 +307,37 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
       let dx = 0;
       let dy = 0;
       let moved = false;
-      
+
       // Check for running
-      const running = keysPressed.current.has('shift');
+      const running = keysPressed.current.has("shift");
       const currentSpeed = running ? speed * 1.5 : speed;
       const moveAmount = currentSpeed * 60 * deltaTime; // 60 FPS normalized
 
       // Calculate movement
-      if (keysPressed.current.has('a') || keysPressed.current.has('arrowleft')) {
+      if (
+        keysPressed.current.has("a") ||
+        keysPressed.current.has("arrowleft")
+      ) {
         dx -= moveAmount;
-        setDirection('left');
+        setDirection("left");
         moved = true;
       }
-      if (keysPressed.current.has('d') || keysPressed.current.has('arrowright')) {
+      if (
+        keysPressed.current.has("d") ||
+        keysPressed.current.has("arrowright")
+      ) {
         dx += moveAmount;
-        setDirection('right');
+        setDirection("right");
         moved = true;
       }
-      if (keysPressed.current.has('w') || keysPressed.current.has('arrowup')) {
+      if (keysPressed.current.has("w") || keysPressed.current.has("arrowup")) {
         dy -= moveAmount;
         moved = true;
       }
-      if (keysPressed.current.has('s') || keysPressed.current.has('arrowdown')) {
+      if (
+        keysPressed.current.has("s") ||
+        keysPressed.current.has("arrowdown")
+      ) {
         dy += moveAmount;
         moved = true;
       }
@@ -299,22 +345,28 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
       // Update position if moved
       if (moved) {
         isMoving.current = true;
-        setPosition(prev => {
+        setPosition((prev) => {
           // Get container bounds or use window
           const container = containerRef?.current;
           const maxX = container ? container.offsetWidth : window.innerWidth;
           const maxY = container ? container.offsetHeight : window.innerHeight;
-          
+
           // Calculate new position with bounds checking
-          const newX = Math.max(size/2, Math.min(maxX - size/2, prev.x + dx));
-          const newY = Math.max(size/2, Math.min(maxY - size/2, prev.y + dy));
-          
+          const newX = Math.max(
+            size / 2,
+            Math.min(maxX - size / 2, prev.x + dx)
+          );
+          const newY = Math.max(
+            size / 2,
+            Math.min(maxY - size / 2, prev.y + dy)
+          );
+
           return { x: newX, y: newY };
         });
-        
+
         // Update action based on movement (unless performing special action)
-        if (!isAttacking && !isJumping && action !== 'sliding') {
-          setAction(running ? 'running' : 'walking');
+        if (!isAttacking && !isJumping && action !== "sliding") {
+          setAction(running ? "running" : "walking");
         }
       } else {
         isMoving.current = false;
@@ -335,21 +387,21 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
     <motion.div
       className="playable-character"
       style={{
-        position: 'fixed',  // Use fixed to position relative to viewport
+        position: "fixed", // Use fixed to position relative to viewport
         width: size,
         height: size,
         left: pixelX,
         top: pixelY,
-        pointerEvents: 'none',
-        zIndex: 999,  // High z-index to stay above other content
-        transform: `scaleX(${direction === 'left' ? -1 : 1})`,
+        pointerEvents: "none",
+        zIndex: 999, // High z-index to stay above other content
+        transform: `scaleX(${direction === "left" ? -1 : 1})`,
       }}
       animate={{
         x: 0,
         y: isJumping ? -30 : 0,
       }}
       transition={{
-        y: { duration: 0.3, ease: 'easeOut' }
+        y: { duration: 0.3, ease: "easeOut" },
       }}
     >
       {/* Character Sprite */}
@@ -358,32 +410,32 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
           src={sprites[currentFrame] || sprites[0]}
           alt="Player Character"
           style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'contain',
-            imageRendering: 'pixelated'
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+            imageRendering: "pixelated",
           }}
           onError={(e) => {
             // Fallback to colored div if image fails
-            e.currentTarget.style.display = 'none';
+            e.currentTarget.style.display = "none";
           }}
         />
       ) : (
         // Fallback character
         <div
           style={{
-            width: '100%',
-            height: '100%',
-            background: 'linear-gradient(135deg, #4ecdc4, #44a3a0)',
-            borderRadius: '8px',
-            border: '3px solid #000',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            width: "100%",
+            height: "100%",
+            background: "linear-gradient(135deg, #4ecdc4, #44a3a0)",
+            borderRadius: "8px",
+            border: "3px solid #000",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             fontSize: size * 0.3,
-            color: 'white',
-            fontFamily: 'Press Start 2P, cursive',
-            boxShadow: '0 4px 8px rgba(0,0,0,0.3)'
+            color: "white",
+            fontFamily: "Press Start 2P, cursive",
+            boxShadow: "0 4px 8px rgba(0,0,0,0.3)",
           }}
         >
           P1
@@ -393,37 +445,37 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
       {/* Shadow */}
       <div
         style={{
-          position: 'absolute',
+          position: "absolute",
           bottom: -10,
-          left: '50%',
-          transform: 'translateX(-50%)',
+          left: "50%",
+          transform: "translateX(-50%)",
           width: size * 0.8,
           height: 8,
-          backgroundColor: 'rgba(0,0,0,0.3)',
-          borderRadius: '50%',
-          filter: 'blur(4px)'
+          backgroundColor: "rgba(0,0,0,0.3)",
+          borderRadius: "50%",
+          filter: "blur(4px)",
         }}
       />
 
       {/* Name tag */}
       <div
         style={{
-          position: 'absolute',
+          position: "absolute",
           bottom: -25,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          padding: '2px 8px',
-          background: 'rgba(0, 0, 0, 0.8)',
-          border: '1px solid #ffd93d',
-          borderRadius: '3px',
-          whiteSpace: 'nowrap'
+          left: "50%",
+          transform: "translateX(-50%)",
+          padding: "2px 8px",
+          background: "rgba(0, 0, 0, 0.8)",
+          border: "1px solid #ffd93d",
+          borderRadius: "3px",
+          whiteSpace: "nowrap",
         }}
       >
         <span
           style={{
-            fontFamily: 'Press Start 2P, cursive',
-            fontSize: '0.5rem',
-            color: '#ffd93d'
+            fontFamily: "Press Start 2P, cursive",
+            fontSize: "0.5rem",
+            color: "#ffd93d",
           }}
         >
           GIANG

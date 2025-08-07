@@ -101,34 +101,6 @@ const GameLayout: React.FC<GameLayoutProps> = ({ children }) => {
             exit={{ opacity: 0 }}
             onClick={() => setShowMap(false)}
           >
-            {/* Close Button */}
-            <motion.button
-              style={{
-                position: 'fixed',
-                top: '20px',
-                right: '20px',
-                background: 'rgba(233, 69, 96, 0.9)',
-                border: '2px solid #FF6B6B',
-                borderRadius: '50%',
-                width: '40px',
-                height: '40px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                fontSize: '1.2rem',
-                color: '#fff',
-                zIndex: 2001
-              }}
-              whileHover={{ scale: 1.1, background: 'rgba(255, 107, 107, 0.9)' }}
-              whileTap={{ scale: 0.9 }}
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowMap(false);
-              }}
-            >
-              ✕
-            </motion.button>
             
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
@@ -143,6 +115,7 @@ const GameLayout: React.FC<GameLayoutProps> = ({ children }) => {
                   navigate(node.path);
                   setShowMap(false);
                 }}
+                onClose={() => setShowMap(false)}
               />
             </motion.div>
           </motion.div>

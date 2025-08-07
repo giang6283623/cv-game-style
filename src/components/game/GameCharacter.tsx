@@ -6,7 +6,15 @@ interface GameCharacterProps {
   size?: number;
   animated?: boolean;
   direction?: "left" | "right";
-  action?: "idle" | "walk" | "run" | "attack" | "jump" | "hurt" | "code" | "talk";
+  action?:
+    | "idle"
+    | "walk"
+    | "run"
+    | "attack"
+    | "jump"
+    | "hurt"
+    | "code"
+    | "talk";
   customImage?: string;
   frameCount?: number;
   frameRate?: number;
@@ -25,7 +33,6 @@ const GameCharacter: React.FC<GameCharacterProps> = ({
   const [currentFrame, setCurrentFrame] = useState(0);
   const [sprites, setSprites] = useState<string[]>([]);
   const animationRef = useRef<NodeJS.Timeout | null>(null);
-
 
   // Get the correct folder and frame count for each action
   const getActionConfig = (action: string) => {
@@ -54,9 +61,7 @@ const GameCharacter: React.FC<GameCharacterProps> = ({
     for (let i = 0; i < config.frames && i < 6; i++) {
       // Limit to 6 frames for performance
       const frameNumber = i.toString().padStart(3, "0");
-      const spritePath = `/assets/png/png_sequences/${
-        config.folder
-      }/0_skeleton_crusader_${config.folder}_${frameNumber}.png`;
+      const spritePath = `/assets/png/png_sequences/${config.folder}/0_skeleton_crusader_${config.folder}_${frameNumber}.png`;
       spriteList.push(spritePath);
     }
 
