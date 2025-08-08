@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaEnvelope, FaEye, FaLinkedin, FaPhone } from "react-icons/fa";
 import { GiCrossedSwords } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,17 @@ import { cvData } from "../data/cvData";
 const HomePage: React.FC = () => {
   const { personalInfo, objective } = cvData;
   const navigate = useNavigate();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   const iconMap: { [key: string]: React.ReactNode } = {
     linkedin: <FaLinkedin />,
@@ -107,10 +118,11 @@ const HomePage: React.FC = () => {
 
         {/* Quick Action Buttons */}
         <div
+          className="action-buttons-container"
           style={{
             marginTop: "30px",
             display: "flex",
-            gap: "20px",
+            gap: "15px",
             justifyContent: "center",
             flexWrap: "wrap",
           }}
@@ -119,7 +131,7 @@ const HomePage: React.FC = () => {
             onClick={() => navigate("/experience")}
             variant="primary"
             icon={<GiCrossedSwords />}
-            size="large"
+            size={isMobile ? "small" : "medium"}
           >
             Start Quest
           </GameButton>
@@ -128,7 +140,7 @@ const HomePage: React.FC = () => {
             onClick={() => navigate("/skills")}
             variant="secondary"
             icon={<FaEye />}
-            size="large"
+            size={isMobile ? "small" : "medium"}
           >
             View Skills
           </GameButton>
@@ -160,10 +172,11 @@ const HomePage: React.FC = () => {
       >
         <h2>Contact & Socials</h2>
         <div
+          className="contact-buttons-container"
           style={{
             display: "flex",
             justifyContent: "center",
-            gap: "20px",
+            gap: "15px",
             flexWrap: "wrap",
           }}
         >
@@ -180,8 +193,7 @@ const HomePage: React.FC = () => {
                   : "success"
               }
               icon={btn.icon}
-              size="medium"
-            >
+              size={isMobile ? "small" : "medium"}>
               {btn.label}
             </GameButton>
           ))}

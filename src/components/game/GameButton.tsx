@@ -1,11 +1,11 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
+import React from "react";
 
 interface GameButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
-  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info';
-  size?: 'small' | 'medium' | 'large';
+  variant?: "primary" | "secondary" | "success" | "warning" | "danger" | "info";
+  size?: "small" | "medium" | "large";
   icon?: React.ReactNode;
   disabled?: boolean;
   fullWidth?: boolean;
@@ -17,158 +17,133 @@ interface GameButtonProps {
 const GameButton: React.FC<GameButtonProps> = ({
   children,
   onClick,
-  variant = 'primary',
-  size = 'medium',
+  variant = "primary",
+  size = "medium",
   icon,
   disabled = false,
   fullWidth = false,
   href,
   target,
-  glowing = false
 }) => {
   const variants = {
     primary: {
-      background: 'linear-gradient(180deg, #ff6b7a 0%, #ff4757 50%, #ee3f55 100%)',
-      borderColor: '#d63447',
-      shadowColor: '#a02839',
-      textColor: '#ffffff'
+      background: "linear-gradient(135deg, #FF6B6B, #FF6B6B99)",
+      borderColor: "#FF6B6B",
+      shadowColor: "#FF6B6B55",
+      textColor: "#ffffff",
     },
     secondary: {
-      background: 'linear-gradient(180deg, #5cd3cc 0%, #4ecdc4 50%, #3db5ac 100%)',
-      borderColor: '#2d9990',
-      shadowColor: '#1e6660',
-      textColor: '#ffffff'
+      background: "linear-gradient(135deg, #4ECDC4, #4ECDC499)",
+      borderColor: "#4ECDC4",
+      shadowColor: "#4ECDC455",
+      textColor: "#ffffff",
     },
     success: {
-      background: 'linear-gradient(180deg, #7ed68f 0%, #6bcf7f 50%, #52b869 100%)',
-      borderColor: '#4ea563',
-      shadowColor: '#3a7a49',
-      textColor: '#ffffff'
+      background: "linear-gradient(135deg, #95E77E, #95E77E99)",
+      borderColor: "#95E77E",
+      shadowColor: "#95E77E55",
+      textColor: "#ffffff",
     },
     warning: {
-      background: 'linear-gradient(180deg, #ffc633 0%, #ffb800 50%, #e6a500 100%)',
-      borderColor: '#cc9200',
-      shadowColor: '#996e00',
-      textColor: '#000000'
+      background: "linear-gradient(135deg, #FFD93D, #FFD93D99)",
+      borderColor: "#FFD93D",
+      shadowColor: "#FFD93D55",
+      textColor: "#ffffff",
     },
     danger: {
-      background: 'linear-gradient(180deg, #ff8585 0%, #ff6b6b 50%, #ff5252 100%)',
-      borderColor: '#e04848',
-      shadowColor: '#b33636',
-      textColor: '#ffffff'
+      background: "linear-gradient(135deg, #FF8CC3, #FF8CC399)",
+      borderColor: "#FF8CC3",
+      shadowColor: "#FF8CC355",
+      textColor: "#ffffff",
     },
     info: {
-      background: 'linear-gradient(180deg, #74a8f4 0%, #5e96e8 50%, #4a7dd8 100%)',
-      borderColor: '#3968c3',
-      shadowColor: '#2850a0',
-      textColor: '#ffffff'
-    }
+      background: "linear-gradient(135deg, #00D9FF, #00D9FF99)",
+      borderColor: "#00D9FF",
+      shadowColor: "#00D9FF55",
+      textColor: "#ffffff",
+    },
   };
 
   const sizes = {
     small: {
-      padding: '8px 16px',
-      fontSize: '0.6rem',
-      iconSize: '0.8rem'
+      padding: "6px 10px",
+      fontSize: "0.5rem",
+      iconSize: "1rem",
+      height: "36px",
     },
     medium: {
-      padding: '12px 24px',
-      fontSize: '0.8rem',
-      iconSize: '1rem'
+      padding: "8px 12px",
+      fontSize: "0.65rem",
+      iconSize: "1rem",
+      height: "38px",
     },
     large: {
-      padding: '16px 32px',
-      fontSize: '1rem',
-      iconSize: '1.2rem'
-    }
+      padding: "10px 16px",
+      fontSize: "0.7rem",
+      iconSize: "1.1rem",
+      height: "42px",
+    },
   };
 
   const currentVariant = variants[variant];
   const currentSize = sizes[size];
 
   const buttonStyle: React.CSSProperties = {
-    fontFamily: 'Press Start 2P, cursive',
+    fontFamily: "Press Start 2P, cursive",
     fontSize: currentSize.fontSize,
     padding: currentSize.padding,
     background: currentVariant.background,
     color: currentVariant.textColor,
-    border: `3px solid ${currentVariant.borderColor}`,
-    borderRadius: '8px',
-    position: 'relative',
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '10px',
-    width: fullWidth ? '100%' : 'auto',
-    textDecoration: 'none',
+    border: `2px solid ${currentVariant.borderColor}`,
+    borderRadius: "8px",
+    position: "relative",
+    cursor: disabled ? "not-allowed" : "pointer",
+    textTransform: "uppercase",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "6px",
+    width: fullWidth ? "100%" : "auto",
+    textDecoration: "none",
     opacity: disabled ? 0.6 : 1,
-    boxShadow: `
-      inset 0 2px 0 rgba(255, 255, 255, 0.3),
-      inset 0 -2px 0 rgba(0, 0, 0, 0.2),
-      0 4px 0 ${currentVariant.shadowColor},
-      0 6px 0 rgba(0, 0, 0, 0.3),
-      0 8px 8px rgba(0, 0, 0, 0.2)
-    `,
-    textShadow: variant === 'warning' 
-      ? '1px 1px 0 rgba(255, 255, 255, 0.3)' 
-      : '1px 1px 2px rgba(0, 0, 0, 0.5)',
-    overflow: 'hidden',
-    userSelect: 'none'
+    height: currentSize.height,
+    boxShadow: `0 0 12px ${currentVariant.shadowColor}`,
+    overflow: "hidden",
+    userSelect: "none",
+    margin: 0,
   };
 
   const content = (
     <>
-      {/* Shine effect */}
+      {/* Animated shine effect */}
       <motion.div
         style={{
-          position: 'absolute',
+          position: "absolute",
           top: 0,
-          left: '-100%',
-          width: '100%',
-          height: '100%',
-          background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent)',
-          pointerEvents: 'none'
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: `linear-gradient(90deg, transparent, ${currentVariant.borderColor}33, transparent)`,
+          pointerEvents: "none",
         }}
-        animate={glowing ? {
-          left: ['100%', '100%']
-        } : {}}
+        animate={{
+          x: ["-100%", "100%"],
+        }}
         transition={{
           duration: 2,
-          repeat: glowing ? Infinity : 0,
-          repeatDelay: 1
+          repeat: Infinity,
+          ease: "linear",
         }}
       />
-      
-      {/* Glow effect for special buttons */}
-      {glowing && (
-        <motion.div
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            width: '120%',
-            height: '120%',
-            transform: 'translate(-50%, -50%)',
-            background: `radial-gradient(circle, ${currentVariant.borderColor}66 0%, transparent 70%)`,
-            pointerEvents: 'none',
-            zIndex: -1
-          }}
-          animate={{
-            opacity: [0.5, 1, 0.5]
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: 'easeInOut'
-          }}
-        />
-      )}
 
       {icon && (
-        <span style={{ fontSize: currentSize.iconSize, display: 'flex', alignItems: 'center' }}>
+        <span
+          style={{
+            fontSize: currentSize.iconSize,
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           {icon}
         </span>
       )}
@@ -176,35 +151,34 @@ const GameButton: React.FC<GameButtonProps> = ({
     </>
   );
 
-  const Component = href ? 'a' : motion.button;
-  const componentProps = href 
-    ? { href, target, rel: target === '_blank' ? 'noopener noreferrer' : undefined }
+  const Component = href ? "a" : motion.button;
+  const componentProps = href
+    ? {
+        href,
+        target,
+        rel: target === "_blank" ? "noopener noreferrer" : undefined,
+      }
     : { onClick: disabled ? undefined : onClick, disabled };
 
   return (
     <Component
       {...componentProps}
       style={buttonStyle}
-      whileHover={!disabled ? {
-        transform: 'translateY(-2px)',
-        boxShadow: `
-          inset 0 2px 0 rgba(255, 255, 255, 0.3),
-          inset 0 -2px 0 rgba(0, 0, 0, 0.2),
-          0 6px 0 ${currentVariant.shadowColor},
-          0 8px 0 rgba(0, 0, 0, 0.3),
-          0 10px 12px rgba(0, 0, 0, 0.3)
-        `
-      } : {}}
-      whileTap={!disabled ? {
-        transform: 'translateY(2px)',
-        boxShadow: `
-          inset 0 2px 0 rgba(255, 255, 255, 0.3),
-          inset 0 -2px 0 rgba(0, 0, 0, 0.2),
-          0 2px 0 ${currentVariant.shadowColor},
-          0 3px 0 rgba(0, 0, 0, 0.3),
-          0 4px 4px rgba(0, 0, 0, 0.2)
-        `
-      } : {}}
+      whileHover={
+        !disabled
+          ? {
+              scale: 1.05,
+              boxShadow: `0 0 20px ${currentVariant.borderColor}66`,
+            }
+          : {}
+      }
+      whileTap={
+        !disabled
+          ? {
+              scale: 0.95,
+            }
+          : {}
+      }
     >
       {content}
     </Component>
