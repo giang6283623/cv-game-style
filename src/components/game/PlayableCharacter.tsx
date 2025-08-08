@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import MobileControls from "./MobileControls";
 
 interface PlayableCharacterProps {
   containerRef?: React.RefObject<HTMLDivElement>;
@@ -43,6 +44,7 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
   const lastUpdateTime = useRef(Date.now());
   const isMoving = useRef(false);
   const idleTimer = useRef<NodeJS.Timeout | null>(null);
+  const mobileKeysPressed = useRef<Set<string>>(new Set());
 
   // Complete sprite configuration with all available animations
   const spriteConfig = useMemo(
@@ -383,6 +385,103 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
   const pixelX = position.x - size / 2;
   const pixelY = position.y - size / 2;
 
+  // Mobile control handlers
+  const handleMobileMove = (direction: string, pressed: boolean) => {
+    const keyMap: { [key: string]: string } = {
+      'up': 'w',
+      'down': 's',
+      'left': 'a',
+      'right': 'd',
+      'shift': 'shift'
+    };
+    
+    const key = keyMap[direction];
+    if (!key) return;
+    
+    if (pressed) {
+      mobileKeysPressed.current.add(key);
+      keysPressed.current.add(key);
+    } else {
+      mobileKeysPressed.current.delete(key);
+      keysPressed.current.delete(key);
+    }
+  };
+
+  const handleMobileAction = (action: string) => {
+    if (action === 'attack' && !isAttacking) {
+      setIsAttacking(true);
+      const running = keysPressed.current.has('shift');
+      
+      if (isJumping) {
+        setAction('airSlashing');
+      } else if (running && isMoving.current) {
+        setAction('runSlashing');
+      } else {
+        setAction('slashing');
+      }
+      
+      setTimeout(() => {
+        setIsAttacking(false);
+        updateActionBasedOnState();
+      }, 600);
+    } else if (action === 'kick' && !isAttacking) {
+      setIsAttacking(true);
+      setAction('kicking');
+      setTimeout(() => {
+        setIsAttacking(false);
+        updateActionBasedOnState();
+      }, 600);
+    } else if (action === 'special' && !isAttacking) {
+      setIsAttacking(true);
+      const running = keysPressed.current.has('shift');
+      
+      if (isJumping) {
+        setAction('airThrowing');
+      } else if (running && isMoving.current) {
+        setAction('runThrowing');
+      } else {
+        setAction('throwing');
+      }
+      
+      setTimeout(() => {
+        setIsAttacking(false);
+        updateActionBasedOnState();
+      }, 700);
+    }
+  };
+
+  const handleMobileJump = () => {
+    if (!isJumping) {
+      setIsJumping(true);
+      setAction('jumpStart');
+      
+      setTimeout(() => {
+        if (isJumping) {
+          setAction('jumpLoop');
+        }
+      }, 300);
+      
+      setTimeout(() => {
+        setIsJumping(false);
+        setAction('falling');
+        setTimeout(() => {
+          updateActionBasedOnState();
+        }, 200);
+      }, 800);
+    }
+  };
+
+  const updateActionBasedOnState = () => {
+    if (isAttacking || isJumping) return;
+    
+    const running = keysPressed.current.has('shift');
+    if (isMoving.current) {
+      setAction(running ? 'running' : 'walking');
+    } else {
+      setAction('idle');
+    }
+  };
+
   return (
     <motion.div
       className="playable-character"
@@ -484,6 +583,13 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
           GIANG
         </span>
       </div>
+      
+      {/* Mobile Controls */}
+      <MobileControls
+        onMove={handleMobileMove}
+        onAction={handleMobileAction}
+        onJump={handleMobileJump}
+      />
     </motion.div>
   );
 };

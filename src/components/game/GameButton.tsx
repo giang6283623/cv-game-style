@@ -67,19 +67,22 @@ const GameButton: React.FC<GameButtonProps> = ({
 
   const sizes = {
     small: {
-      padding: '8px 16px',
-      fontSize: '0.6rem',
-      iconSize: '0.8rem'
+      padding: '6px 12px',
+      fontSize: '0.5rem',
+      iconSize: '0.7rem',
+      height: '32px'
     },
     medium: {
-      padding: '12px 24px',
-      fontSize: '0.8rem',
-      iconSize: '1rem'
+      padding: '8px 16px',
+      fontSize: '0.6rem',
+      iconSize: '0.9rem',
+      height: '38px'
     },
     large: {
-      padding: '16px 32px',
-      fontSize: '1rem',
-      iconSize: '1.2rem'
+      padding: '10px 20px',
+      fontSize: '0.7rem',
+      iconSize: '1rem',
+      height: '44px'
     }
   };
 
@@ -92,29 +95,30 @@ const GameButton: React.FC<GameButtonProps> = ({
     padding: currentSize.padding,
     background: currentVariant.background,
     color: currentVariant.textColor,
-    border: `3px solid ${currentVariant.borderColor}`,
-    borderRadius: '8px',
+    border: `2px solid ${currentVariant.borderColor}`,
+    borderRadius: '6px',
     position: 'relative',
     cursor: disabled ? 'not-allowed' : 'pointer',
     textTransform: 'uppercase',
-    letterSpacing: '1px',
+    letterSpacing: '0.5px',
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: '10px',
+    gap: '6px',
     width: fullWidth ? '100%' : 'auto',
     textDecoration: 'none',
     opacity: disabled ? 0.6 : 1,
+    minHeight: currentSize.height,
     boxShadow: `
-      inset 0 2px 0 rgba(255, 255, 255, 0.3),
-      inset 0 -2px 0 rgba(0, 0, 0, 0.2),
-      0 4px 0 ${currentVariant.shadowColor},
-      0 6px 0 rgba(0, 0, 0, 0.3),
-      0 8px 8px rgba(0, 0, 0, 0.2)
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+      0 2px 0 ${currentVariant.shadowColor},
+      0 3px 0 rgba(0, 0, 0, 0.2),
+      0 4px 4px rgba(0, 0, 0, 0.15)
     `,
     textShadow: variant === 'warning' 
       ? '1px 1px 0 rgba(255, 255, 255, 0.3)' 
-      : '1px 1px 2px rgba(0, 0, 0, 0.5)',
+      : '1px 1px 1px rgba(0, 0, 0, 0.5)',
     overflow: 'hidden',
     userSelect: 'none'
   };
