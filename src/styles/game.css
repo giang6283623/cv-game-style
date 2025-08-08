@@ -16,15 +16,15 @@
   --pixel-danger: #ff6b6b;
   --pixel-text: #ffffff;
   --pixel-text-secondary: #d1d1e9;
-  --pixel-border: #2ed573;  /* Changed from purple to retro green */
+  --pixel-border: #2ed573; /* Changed from purple to retro green */
   --pixel-shadow: rgba(0, 0, 0, 0.6);
-  --pixel-earth: #8B4513;  /* Classic earth brown */
-  --pixel-sky: #3498db;    /* Classic sky blue */
-  --pixel-gold: #FFD700;    /* Classic gold */
+  --pixel-earth: #8b4513; /* Classic earth brown */
+  --pixel-sky: #3498db; /* Classic sky blue */
+  --pixel-gold: #ffd700; /* Classic gold */
 
   /* UI Colors - Better contrast */
   --ui-panel-bg: rgba(13, 13, 26, 0.95);
-  --ui-panel-border: #2ed573;  /* Changed from purple to retro green */
+  --ui-panel-border: #2ed573; /* Changed from purple to retro green */
   --ui-button-bg: #ff4757;
   --ui-button-hover: #ff6b7a;
   --ui-button-active: #ee3f55;
@@ -157,7 +157,7 @@ span {
   left: -4px;
   right: -4px;
   bottom: -4px;
-  background: var(--pixel-success);  /* Single color instead of gradient */
+  background: var(--pixel-success); /* Single color instead of gradient */
   z-index: -1;
   opacity: 0;
   transition: opacity var(--animation-medium);
@@ -322,7 +322,7 @@ span {
   display: inline-block;
   padding: 8px 16px;
   margin: 5px;
-  background: var(--pixel-info);  /* Single color instead of gradient */
+  background: var(--pixel-info); /* Single color instead of gradient */
   color: white;
   font-family: "VT323", monospace;
   font-size: 1.2rem;
@@ -341,7 +341,7 @@ span {
 
 /* Achievement Card */
 .achievement-card {
-  background: var(--pixel-gold);  /* Single gold color */
+  background: var(--pixel-gold); /* Single gold color */
   border: 3px solid #b8860b;
   padding: 15px;
   margin: 10px;
@@ -524,6 +524,35 @@ main {
   padding: 0 20px;
 }
 
+/* Experience page specific styles */
+.experience-page .quest-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.experience-page .quest-difficulty {
+  text-align: right;
+}
+
+.experience-page .quest-detail {
+  margin-top: 20px;
+}
+
+.experience-page .quest-objective,
+.experience-page .quest-equipment,
+.experience-page .quest-rewards,
+.experience-page .quest-features {
+  margin-top: 30px;
+}
+
+.experience-page .quest-expand-indicator {
+  text-align: center;
+  margin-top: 20px;
+  color: var(--pixel-accent);
+  font-size: 1.5rem;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   h1 {
@@ -559,6 +588,48 @@ main {
   .dialog-box {
     padding: 20px;
   }
+
+  /* Experience page responsive adjustments */
+  .experience-page .quest-header {
+    flex-direction: column;
+  }
+
+  .experience-page .quest-difficulty {
+    text-align: left;
+    margin-top: 10px;
+  }
+
+  .experience-page .company-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .experience-page .date-status {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .experience-page .quest-detail {
+    margin-top: 15px;
+  }
+
+  .experience-page .quest-objective,
+  .experience-page .quest-equipment,
+  .experience-page .quest-rewards,
+  .experience-page .quest-features {
+    margin-top: 20px;
+  }
+
+  .experience-page h4 {
+    font-size: 0.9rem;
+  }
+
+  .skill-badge {
+    padding: 5px 12px;
+    font-size: 0.9rem;
+    margin: 3px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -581,5 +652,30 @@ main {
     font-size: 0.45rem;
     padding: 8px 12px;
     min-height: 30px;
+  }
+
+  /* Experience page small screen adjustments */
+  .experience-page {
+    padding: 0 10px;
+  }
+
+  .experience-page .quest-expand-indicator {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    padding: 10px 0;
+  }
+
+  .experience-page li {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+  }
+
+  .experience-page .skill-badge {
+    font-size: 0.85rem;
+    padding: 5px 10px;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

@@ -301,7 +301,7 @@ const MobileControls: React.FC<MobileControlsProps> = ({
         style={{
           pointerEvents: "auto",
           position: "absolute",
-          bottom: "20px",
+          bottom: 132,
           right: "20px",
           width: 56,
           height: 56,

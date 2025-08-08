@@ -117,7 +117,7 @@ const SkillsPage: React.FC = () => {
                 color: "#4ecdc4",
               }}
             >
-              Full-Stack Engineer | R&D Specialist
+              R&D Engineer | FE Developer
             </p>
             <div
               style={{
