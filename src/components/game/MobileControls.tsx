@@ -150,7 +150,7 @@ const MobileControls: React.FC<MobileControlsProps> = ({
         <motion.div
           drag="x"
           dragMomentum={false}
-          onDragEnd={(e, info) => {
+          onDragEnd={(_e, info) => {
             if (info.offset.x < -60) {
               setDpadHidden(true);
             }
@@ -243,7 +243,7 @@ const MobileControls: React.FC<MobileControlsProps> = ({
         <motion.div
           drag="x"
           dragMomentum={false}
-          onDragEnd={(e, info) => {
+          onDragEnd={(_e, info) => {
             if (info.offset.x > 60) {
               setActionsHidden(true);
             }
