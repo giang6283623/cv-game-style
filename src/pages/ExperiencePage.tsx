@@ -121,6 +121,7 @@ const ExperiencePage: React.FC = () => {
                       color: exp.current ? "#000" : "#fff",
                       fontFamily: "Press Start 2P, cursive",
                       fontSize: "0.5rem",
+                      height: "32px",
                       borderRadius: "4px",
                       display: "flex",
                       alignItems: "center",

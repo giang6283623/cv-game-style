@@ -112,7 +112,7 @@ const GameLayout: React.FC<GameLayoutProps> = ({ children }) => {
       <PlayableCharacter size={80} speed={3} />
 
       {/* Controls Help - Global */}
-      <ControlsHelp />
+      {!isMobile && <ControlsHelp />}
 
       {/* Dungeon Map Modal - Global */}
       <AnimatePresence>
@@ -463,7 +463,9 @@ const GameLayout: React.FC<GameLayoutProps> = ({ children }) => {
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setShowMap(true)}
                 >
-                  <span style={{ fontSize: "1rem" }}><FaMap /></span>
+                  <span style={{ fontSize: "1rem" }}>
+                    <FaMap />
+                  </span>
                   {!isMobile && "MAP"}
                   {isMobile && !isSmallMobile && "MAP"}
                 </motion.button>
