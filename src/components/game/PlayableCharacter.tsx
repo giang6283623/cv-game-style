@@ -461,7 +461,7 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
       <div
         style={{
           position: "absolute",
-          bottom: -25,
+          bottom: -15,
           left: "50%",
           transform: "translateX(-50%)",
           padding: "2px 8px",
@@ -469,6 +469,9 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
           border: "1px solid #ffd93d",
           borderRadius: "3px",
           whiteSpace: "nowrap",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <span
