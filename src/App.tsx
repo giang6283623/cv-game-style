@@ -1,13 +1,24 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import GameLayout from './components/GameLayout';
-import HomePage from './pages/HomePage';
-import ExperiencePage from './pages/ExperiencePage';
-import SkillsPage from './pages/SkillsPage';
-import EducationPage from './pages/EducationPage';
-import AchievementsPage from './pages/AchievementsPage';
-import ContactPage from './pages/ContactPage';
-import './styles/game.css';
-import './App.css';
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import GameLayout from "./components/GameLayout";
+import AchievementsPage from "./pages/AchievementsPage";
+import ContactPage from "./pages/ContactPage";
+import EducationPage from "./pages/EducationPage";
+import ExperiencePage from "./pages/ExperiencePage";
+import HomePage from "./pages/HomePage";
+import SkillsPage from "./pages/SkillsPage";
+
+import "./App.css";
+import "./styles/game.css";
+import { preloadSprites } from "./ultils/spritePreloader";
+
+// Call preloadSprites early in your app initialization
+preloadSprites()
+  .then(() => {
+    console.log("Sprites loaded, app ready!");
+  })
+  .catch((error) => {
+    console.warn("Sprite preloading had some issues:", error);
+  });
 
 function App() {
   return (
@@ -26,4 +37,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

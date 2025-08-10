@@ -151,7 +151,8 @@ const GameButton: React.FC<GameButtonProps> = ({
     </>
   );
 
-  const Component = href ? "a" : motion.button;
+  // const Component = href ? "a" : motion.button;
+  const Component = href ? motion.a : motion.button;
   const componentProps = href
     ? {
         href,
