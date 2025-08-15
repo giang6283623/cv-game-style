@@ -39,7 +39,7 @@ const AchievementsPage: React.FC = () => {
         />
         <h2 style={{ color: '#ffd93d', marginTop: '20px' }}>LEGENDARY ACHIEVEMENTS</h2>
         <p style={{ 
-          fontFamily: 'VT323, monospace',
+          fontFamily: 'Oxanium, sans-serif',
           fontSize: '1.4rem',
           color: '#4ecdc4'
         }}>
@@ -114,7 +114,7 @@ const AchievementsPage: React.FC = () => {
               </h3>
               
               <p style={{ 
-                fontFamily: 'VT323, monospace',
+                fontFamily: 'Oxanium, sans-serif',
                 fontSize: '1.3rem',
                 color: '#4ECDC4',
                 marginBottom: '10px',
@@ -124,7 +124,7 @@ const AchievementsPage: React.FC = () => {
               </p>
               
               <p style={{ 
-                fontFamily: 'VT323, monospace',
+                fontFamily: 'Oxanium, sans-serif',
                 fontSize: '1.1rem',
                 color: '#E0E0E0',
                 marginBottom: '20px',
@@ -229,7 +229,7 @@ const AchievementsPage: React.FC = () => {
               </h3>
               
               <p style={{ 
-                fontFamily: 'VT323, monospace',
+                fontFamily: 'Oxanium, sans-serif',
                 fontSize: '1.3rem',
                 color: '#FFD93D',
                 marginBottom: '20px',

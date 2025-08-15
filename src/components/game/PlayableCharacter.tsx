@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import Beam from "./Beam";
+import Fireworks from "./Fireworks";
 import MobileControls from "./MobileControls";
 
 interface PlayableCharacterProps {
@@ -39,12 +41,32 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
   const [sprites, setSprites] = useState<string[]>([]);
   const [isJumping, setIsJumping] = useState(false);
   const [isAttacking, setIsAttacking] = useState(false);
+  const [beams, setBeams] = useState<
+    Array<{
+      id: string;
+      x: number;
+      y: number;
+      direction: "left" | "right";
+      color: string;
+      type: string;
+      angle: number;
+    }>
+  >([]);
+  const [fireworks, setFireworks] = useState<
+    Array<{
+      id: string;
+      x: number;
+      y: number;
+      color: string;
+    }>
+  >([]);
   const keysPressed = useRef<Set<string>>(new Set());
   const animationRef = useRef<number>(0);
   const lastUpdateTime = useRef(Date.now());
   const isMoving = useRef(false);
   const idleTimer = useRef<NodeJS.Timeout | null>(null);
   const mobileKeysPressed = useRef<Set<string>>(new Set());
+  const beamIdCounter = useRef(0);
 
   // Complete sprite configuration with all available animations
   const spriteConfig = useMemo(
@@ -187,23 +209,32 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
         }, 600);
       }
 
-      // Handle throw
-      if (key === "v" && !isAttacking) {
-        setIsAttacking(true);
-        const running = keysPressed.current.has("shift");
+      // Handle throw - allow rapid throwing
+      if (key === "v") {
+        const throwTypes = ["throwing", "airThrowing", "runThrowing"];
+        const canThrow = !isAttacking || throwTypes.includes(action);
 
-        if (isJumping) {
-          setAction("airThrowing");
-        } else if (running && isMoving.current) {
-          setAction("runThrowing");
-        } else {
-          setAction("throwing");
+        if (canThrow) {
+          setIsAttacking(true);
+          const running = keysPressed.current.has("shift");
+
+          if (isJumping) {
+            setAction("airThrowing");
+          } else if (running && isMoving.current) {
+            setAction("runThrowing");
+          } else {
+            setAction("throwing");
+          }
+
+          // Spawn beam immediately for rapid fire
+          spawnBeam();
+
+          // Shorter cooldown for rapid throwing
+          setTimeout(() => {
+            setIsAttacking(false);
+            updateActionBasedOnState();
+          }, 400);
         }
-
-        setTimeout(() => {
-          setIsAttacking(false);
-          updateActionBasedOnState();
-        }, 700);
       }
 
       // Handle slide - check for any movement key pressed
@@ -388,16 +419,16 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
   // Mobile control handlers
   const handleMobileMove = (direction: string, pressed: boolean) => {
     const keyMap: { [key: string]: string } = {
-      'up': 'w',
-      'down': 's',
-      'left': 'a',
-      'right': 'd',
-      'shift': 'shift'
+      up: "w",
+      down: "s",
+      left: "a",
+      right: "d",
+      shift: "shift",
     };
-    
+
     const key = keyMap[direction];
     if (!key) return;
-    
+
     if (pressed) {
       mobileKeysPressed.current.add(key);
       keysPressed.current.add(key);
@@ -408,62 +439,71 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
   };
 
   const handleMobileAction = (action: string) => {
-    if (action === 'attack' && !isAttacking) {
+    if (action === "attack" && !isAttacking) {
       setIsAttacking(true);
-      const running = keysPressed.current.has('shift');
-      
+      const running = keysPressed.current.has("shift");
+
       if (isJumping) {
-        setAction('airSlashing');
+        setAction("airSlashing");
       } else if (running && isMoving.current) {
-        setAction('runSlashing');
+        setAction("runSlashing");
       } else {
-        setAction('slashing');
+        setAction("slashing");
       }
-      
+
       setTimeout(() => {
         setIsAttacking(false);
         updateActionBasedOnState();
       }, 600);
-    } else if (action === 'kick' && !isAttacking) {
+    } else if (action === "kick" && !isAttacking) {
       setIsAttacking(true);
-      setAction('kicking');
+      setAction("kicking");
       setTimeout(() => {
         setIsAttacking(false);
         updateActionBasedOnState();
       }, 600);
-    } else if (action === 'special' && !isAttacking) {
-      setIsAttacking(true);
-      const running = keysPressed.current.has('shift');
-      
-      if (isJumping) {
-        setAction('airThrowing');
-      } else if (running && isMoving.current) {
-        setAction('runThrowing');
-      } else {
-        setAction('throwing');
+    } else if (action === "special") {
+      const throwTypes = ["throwing", "airThrowing", "runThrowing"];
+      const canThrow = !isAttacking || throwTypes.includes(action);
+
+      if (canThrow) {
+        setIsAttacking(true);
+        const running = keysPressed.current.has("shift");
+
+        if (isJumping) {
+          setAction("airThrowing");
+        } else if (running && isMoving.current) {
+          setAction("runThrowing");
+        } else {
+          setAction("throwing");
+        }
+
+        // Spawn beam immediately for rapid fire
+        spawnBeam();
+
+        // Shorter cooldown for rapid throwing
+        setTimeout(() => {
+          setIsAttacking(false);
+          updateActionBasedOnState();
+        }, 400);
       }
-      
-      setTimeout(() => {
-        setIsAttacking(false);
-        updateActionBasedOnState();
-      }, 700);
     }
   };
 
   const handleMobileJump = () => {
     if (!isJumping) {
       setIsJumping(true);
-      setAction('jumpStart');
-      
+      setAction("jumpStart");
+
       setTimeout(() => {
         if (isJumping) {
-          setAction('jumpLoop');
+          setAction("jumpLoop");
         }
       }, 300);
-      
+
       setTimeout(() => {
         setIsJumping(false);
-        setAction('falling');
+        setAction("falling");
         setTimeout(() => {
           updateActionBasedOnState();
         }, 200);
@@ -473,124 +513,212 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
 
   const updateActionBasedOnState = () => {
     if (isAttacking || isJumping) return;
-    
-    const running = keysPressed.current.has('shift');
+
+    const running = keysPressed.current.has("shift");
     if (isMoving.current) {
-      setAction(running ? 'running' : 'walking');
+      setAction(running ? "running" : "walking");
     } else {
-      setAction('idle');
+      setAction("idle");
     }
   };
 
+  // Beam management functions
+  const spawnBeam = () => {
+    const beamId = `beam_${beamIdCounter.current++}`;
+    const beamStartX =
+      direction === "right" ? position.x + size / 4 : position.x - size / 4;
+    const beamStartY = position.y;
+
+    // Randomized colors for better visual effect
+    const beamColors = [
+      "#ff6b6b", // Vibrant red
+      "#4ecdc4", // Cyan
+      "#45b7d1", // Blue
+      "#96ceb4", // Green
+      "#ffd93d", // Yellow
+      "#dda0dd", // Plum
+      "#ff8a65", // Orange
+      "#81c784", // Light green
+      "#64b5f6", // Light blue
+    ];
+
+    const randomColor =
+      beamColors[Math.floor(Math.random() * beamColors.length)];
+
+    // Random scatter angle between -20 to +20 degrees
+    const scatterAngle = (Math.random() - 0.5) * 40; // -20 to +20 degrees
+
+    const newBeam = {
+      id: beamId,
+      x: beamStartX,
+      y: beamStartY,
+      direction: direction,
+      color: randomColor,
+      type: action,
+      angle: scatterAngle,
+    };
+
+    setBeams((prev) => [...prev, newBeam]);
+  };
+
+  const destroyBeam = (beamId: string) => {
+    setBeams((prev) => prev.filter((beam) => beam.id !== beamId));
+  };
+
+  const createFireworks = (x: number, y: number, color: string) => {
+    const fireworksId = `fireworks_${Date.now()}_${Math.random()}`;
+    const newFireworks = {
+      id: fireworksId,
+      x,
+      y,
+      color,
+    };
+    setFireworks((prev) => [...prev, newFireworks]);
+  };
+
+  const destroyFireworks = (fireworksId: string) => {
+    setFireworks((prev) => prev.filter((fw) => fw.id !== fireworksId));
+  };
+
   return (
-    <motion.div
-      className="playable-character"
-      style={{
-        position: "fixed", // Use fixed to position relative to viewport
-        width: size,
-        height: size,
-        left: pixelX,
-        top: pixelY,
-        pointerEvents: "none",
-        zIndex: 999, // High z-index to stay above other content
-        transform: `scaleX(${direction === "left" ? -1 : 1})`,
-      }}
-      animate={{
-        x: 0,
-        y: isJumping ? -30 : 0,
-      }}
-      transition={{
-        y: { duration: 0.3, ease: "easeOut" },
-      }}
-    >
-      {/* Character Sprite */}
-      {sprites.length > 0 ? (
-        <img
-          src={sprites[currentFrame] || sprites[0]}
-          alt="Player Character"
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-            imageRendering: "pixelated",
-          }}
-          onError={(e) => {
-            // Fallback to colored div if image fails
-            e.currentTarget.style.display = "none";
-          }}
-        />
-      ) : (
-        // Fallback character
+    <>
+      <motion.div
+        className="playable-character"
+        style={{
+          position: "fixed", // Use fixed to position relative to viewport
+          width: size,
+          height: size,
+          left: pixelX,
+          top: pixelY,
+          pointerEvents: "none",
+          zIndex: 999, // High z-index to stay above other content
+          transform: `scaleX(${direction === "left" ? -1 : 1})`,
+        }}
+        animate={{
+          x: 0,
+          y: isJumping ? -30 : 0,
+        }}
+        transition={{
+          y: { duration: 0.3, ease: "easeOut" },
+        }}
+      >
+        {/* Character Sprite */}
+        {sprites.length > 0 ? (
+          <img
+            src={sprites[currentFrame] || sprites[0]}
+            alt="Player Character"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "contain",
+              imageRendering: "pixelated",
+            }}
+            onError={(e) => {
+              // Fallback to colored div if image fails
+              e.currentTarget.style.display = "none";
+            }}
+          />
+        ) : (
+          // Fallback character
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              background: "linear-gradient(135deg, #4ecdc4, #44a3a0)",
+              borderRadius: "8px",
+              border: "3px solid #000",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: size * 0.3,
+              color: "white",
+              fontFamily: "Press Start 2P, cursive",
+              boxShadow: "0 4px 8px rgba(0,0,0,0.3)",
+            }}
+          >
+            P1
+          </div>
+        )}
+
+        {/* Shadow */}
         <div
           style={{
-            width: "100%",
-            height: "100%",
-            background: "linear-gradient(135deg, #4ecdc4, #44a3a0)",
-            borderRadius: "8px",
-            border: "3px solid #000",
+            position: "absolute",
+            bottom: -10,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: size * 0.8,
+            height: 8,
+            backgroundColor: "rgba(0,0,0,0.3)",
+            borderRadius: "50%",
+            filter: "blur(4px)",
+          }}
+        />
+
+        {/* Name tag */}
+        <div
+          style={{
+            position: "absolute",
+            bottom: -15,
+            left: "50%",
+            transform: "translateX(-50%)",
+            padding: "2px 8px",
+            background: "rgba(0, 0, 0, 0.8)",
+            border: "1px solid #ffd93d",
+            borderRadius: "3px",
+            whiteSpace: "nowrap",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            fontSize: size * 0.3,
-            color: "white",
-            fontFamily: "Press Start 2P, cursive",
-            boxShadow: "0 4px 8px rgba(0,0,0,0.3)",
           }}
         >
-          P1
+          <span
+            style={{
+              fontFamily: "Press Start 2P, cursive",
+              fontSize: "0.5rem",
+              color: "#ffd93d",
+            }}
+          >
+            GIANG
+          </span>
         </div>
-      )}
+      </motion.div>
 
-      {/* Shadow */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: -10,
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: size * 0.8,
-          height: 8,
-          backgroundColor: "rgba(0,0,0,0.3)",
-          borderRadius: "50%",
-          filter: "blur(4px)",
-        }}
-      />
+      {/* Render active beams */}
+      {beams.map((beam) => (
+        <Beam
+          key={beam.id}
+          id={beam.id}
+          startX={beam.x}
+          startY={beam.y}
+          direction={beam.direction}
+          onDestroy={destroyBeam}
+          speed={beam.type === "runThrowing" ? 12 : 8}
+          color={beam.color}
+          angle={beam.angle}
+          onExplode={createFireworks}
+        />
+      ))}
 
-      {/* Name tag */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: -15,
-          left: "50%",
-          transform: "translateX(-50%)",
-          padding: "2px 8px",
-          background: "rgba(0, 0, 0, 0.8)",
-          border: "1px solid #ffd93d",
-          borderRadius: "3px",
-          whiteSpace: "nowrap",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <span
-          style={{
-            fontFamily: "Press Start 2P, cursive",
-            fontSize: "0.5rem",
-            color: "#ffd93d",
-          }}
-        >
-          GIANG
-        </span>
-      </div>
-      
-      {/* Mobile Controls */}
+      {/* Render fireworks explosions */}
+      {fireworks.map((fw) => (
+        <Fireworks
+          key={fw.id}
+          id={fw.id}
+          x={fw.x}
+          y={fw.y}
+          color={fw.color}
+          onDestroy={destroyFireworks}
+        />
+      ))}
+
+      {/* Mobile Controls - Positioned independently of character */}
       <MobileControls
         onMove={handleMobileMove}
         onAction={handleMobileAction}
         onJump={handleMobileJump}
       />
-    </motion.div>
+    </>
   );
 };
 

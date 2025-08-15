@@ -1,9 +1,9 @@
 /* Game Style CSS - Pixel Art Theme */
 
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Oxanium:wght@200;300;400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Oxanium:wght@200;300;400;500;600;700;800&display=swap");
 
 :root {
-  /* Game Color Palette - Improved for accessibility */
+  /* Game Color Palette - Classic 2D Game Colors */
   --pixel-bg-dark: #0d0d1a;
   --pixel-bg-medium: #1a1a2e;
   --pixel-bg-light: #16213e;
@@ -16,16 +16,19 @@
   --pixel-danger: #ff6b6b;
   --pixel-text: #ffffff;
   --pixel-text-secondary: #d1d1e9;
-  --pixel-border: #6c5ce7;
+  --pixel-border: #2ed573; /* Changed from purple to retro green */
   --pixel-shadow: rgba(0, 0, 0, 0.6);
-  
+  --pixel-earth: #8b4513; /* Classic earth brown */
+  --pixel-sky: #3498db; /* Classic sky blue */
+  --pixel-gold: #ffd700; /* Classic gold */
+
   /* UI Colors - Better contrast */
   --ui-panel-bg: rgba(13, 13, 26, 0.95);
-  --ui-panel-border: #6c5ce7;
+  --ui-panel-border: #2ed573; /* Changed from purple to retro green */
   --ui-button-bg: #ff4757;
   --ui-button-hover: #ff6b7a;
   --ui-button-active: #ee3f55;
-  
+
   /* Animation Timing */
   --animation-fast: 0.2s;
   --animation-medium: 0.4s;
@@ -34,19 +37,21 @@
 
 * {
   box-sizing: border-box;
-  /* Better cross-browser support for pixel art rendering */
-  image-rendering: -moz-crisp-edges;          /* Firefox */
-  image-rendering: -webkit-crisp-edges;       /* Safari */
-  image-rendering: pixelated;                 /* Chrome, Opera */
-  image-rendering: crisp-edges;               /* Legacy */
-  -ms-interpolation-mode: nearest-neighbor;   /* IE */
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Oxanium', sans-serif;
-  background: linear-gradient(135deg, var(--pixel-bg-dark) 0%, var(--pixel-bg-medium) 50%, var(--pixel-bg-light) 100%);
+  font-family: "Oxanium", sans-serif;
+  background: linear-gradient(
+    135deg,
+    var(--pixel-bg-dark) 0%,
+    var(--pixel-bg-medium) 50%,
+    var(--pixel-bg-light) 100%
+  );
   color: var(--pixel-text);
   min-height: 100vh;
   overflow-x: hidden;
@@ -63,14 +68,13 @@ body {
 
 /* Animated Background Pattern */
 body::before {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
-    repeating-linear-gradient(
+  background-image: repeating-linear-gradient(
       0deg,
       transparent,
       transparent 2px,
@@ -89,13 +93,16 @@ body::before {
 }
 
 /* Pixel Perfect Typography */
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Press Start 2P', cursive;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Press Start 2P", cursive;
   text-transform: uppercase;
   letter-spacing: 2px;
-  text-shadow: 
-    2px 2px 0px var(--pixel-shadow),
-    4px 4px 0px rgba(0, 0, 0, 0.2);
+  text-shadow: 2px 2px 0px var(--pixel-shadow), 4px 4px 0px rgba(0, 0, 0, 0.2);
 }
 
 h1 {
@@ -120,7 +127,9 @@ h3 {
   margin: 15px 0;
 }
 
-p, li, span {
+p,
+li,
+span {
   font-size: 1.4rem;
   line-height: 1.8;
   letter-spacing: 0.5px;
@@ -134,9 +143,7 @@ p, li, span {
   padding: 30px;
   margin: 20px auto;
   position: relative;
-  box-shadow: 
-    0 0 0 2px black,
-    0 0 0 4px var(--ui-panel-border),
+  box-shadow: 0 0 0 2px black, 0 0 0 4px var(--ui-panel-border),
     8px 8px 0 0 rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(5px);
   width: 95%;
@@ -144,18 +151,13 @@ p, li, span {
 }
 
 .game-panel::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -4px;
   left: -4px;
   right: -4px;
   bottom: -4px;
-  background: linear-gradient(45deg, 
-    var(--pixel-primary) 0%, 
-    var(--pixel-accent) 25%, 
-    var(--pixel-info) 50%, 
-    var(--pixel-success) 75%, 
-    var(--pixel-primary) 100%);
+  background: var(--pixel-success); /* Single color instead of gradient */
   z-index: -1;
   opacity: 0;
   transition: opacity var(--animation-medium);
@@ -163,8 +165,13 @@ p, li, span {
 }
 
 @keyframes borderGlow {
-  0%, 100% { opacity: 0; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .game-panel:hover::before {
@@ -173,36 +180,32 @@ p, li, span {
 
 /* Pixel Button Styles */
 .pixel-button {
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.8rem;
-  padding: 12px 24px;
+  font-family: "Press Start 2P", cursive;
+  font-size: 0.6rem;
+  padding: 10px 18px;
   background: var(--ui-button-bg);
   color: white;
-  border: none;
+  border: 2px solid var(--ui-button-active);
+  border-radius: 4px;
   position: relative;
   cursor: pointer;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   transition: all var(--animation-fast);
-  box-shadow: 
-    0 4px 0 0 var(--ui-button-active),
-    0 6px 0 0 rgba(0, 0, 0, 0.5);
-  margin: 10px;
+  box-shadow: 0 3px 0 0 var(--ui-button-active), 0 4px 0 0 rgba(0, 0, 0, 0.4);
+  margin: 8px;
+  min-height: 36px;
 }
 
 .pixel-button:hover {
   background: var(--ui-button-hover);
   transform: translateY(-2px);
-  box-shadow: 
-    0 6px 0 0 var(--ui-button-active),
-    0 8px 0 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 5px 0 0 var(--ui-button-active), 0 6px 0 0 rgba(0, 0, 0, 0.4);
 }
 
 .pixel-button:active {
   transform: translateY(2px);
-  box-shadow: 
-    0 2px 0 0 var(--ui-button-active),
-    0 3px 0 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1px 0 0 var(--ui-button-active), 0 2px 0 0 rgba(0, 0, 0, 0.4);
 }
 
 .pixel-button.secondary {
@@ -236,26 +239,30 @@ p, li, span {
 }
 
 .health-bar-fill::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, 
-    transparent, 
-    rgba(255, 255, 255, 0.3), 
-    transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
   animation: healthShine 2s infinite;
 }
 
 @keyframes healthShine {
-  to { left: 100%; }
+  to {
+    left: 100%;
+  }
 }
 
 /* Experience Points Counter */
 .xp-counter {
-  font-family: 'Press Start 2P', cursive;
+  font-family: "Press Start 2P", cursive;
   font-size: 1rem;
   color: var(--pixel-accent);
   text-shadow: 2px 2px 0 var(--pixel-shadow);
@@ -267,8 +274,13 @@ p, li, span {
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 /* Dialog Box Style */
@@ -284,19 +296,25 @@ p, li, span {
 }
 
 .dialog-box::before {
-  content: '▶';
+  content: "▶";
   position: absolute;
   left: -20px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--pixel-accent);
   font-size: 1.5rem;
-  animation: blink 1s infinite;
+  animation: blink 4s infinite;
 }
 
 @keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
 }
 
 /* Skill Badge Style */
@@ -304,14 +322,15 @@ p, li, span {
   display: inline-block;
   padding: 8px 16px;
   margin: 5px;
-  background: linear-gradient(135deg, var(--pixel-info), var(--pixel-primary));
+  background: var(--pixel-info); /* Single color instead of gradient */
   color: white;
-  font-family: 'Oxanium', sans-serif;
+  font-family: "Oxanium", sans-serif;
   font-size: 1.2rem;
   text-transform: uppercase;
   position: relative;
   clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
   transition: all var(--animation-fast);
+  border: 2px solid var(--pixel-sky);
 }
 
 .skill-badge:hover {
@@ -322,19 +341,17 @@ p, li, span {
 
 /* Achievement Card */
 .achievement-card {
-  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  background: var(--pixel-gold); /* Single gold color */
   border: 3px solid #b8860b;
   padding: 15px;
   margin: 10px;
   position: relative;
   color: #333;
-  box-shadow: 
-    0 0 20px rgba(255, 215, 0, 0.5),
-    0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .achievement-card::before {
-  content: '★';
+  content: "★";
   position: absolute;
   top: -15px;
   right: 10px;
@@ -345,28 +362,42 @@ p, li, span {
 }
 
 @keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Loading Animation */
 .loading-dots {
   display: inline-block;
-  font-family: 'Press Start 2P', cursive;
+  font-family: "Press Start 2P", cursive;
   font-size: 2rem;
   letter-spacing: 0.5em;
 }
 
 .loading-dots::after {
-  content: '...';
+  content: "...";
   animation: dots 1.5s steps(4, end) infinite;
 }
 
 @keyframes dots {
-  0%, 20% { content: ''; }
-  40% { content: '.'; }
-  60% { content: '..'; }
-  80%, 100% { content: '...'; }
+  0%,
+  20% {
+    content: "";
+  }
+  40% {
+    content: ".";
+  }
+  60% {
+    content: "..";
+  }
+  80%,
+  100% {
+    content: "...";
+  }
 }
 
 /* Floating Animation */
@@ -375,8 +406,13 @@ p, li, span {
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
 /* Glitch Effect */
@@ -409,25 +445,54 @@ p, li, span {
 }
 
 @keyframes glitch {
-  0%, 100% { transform: translate(0); }
-  20% { transform: translate(-2px, 2px); }
-  40% { transform: translate(-2px, -2px); }
-  60% { transform: translate(2px, 2px); }
-  80% { transform: translate(2px, -2px); }
+  0%,
+  100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
 }
 
 @keyframes glitch-1 {
-  0%, 100% { clip-path: inset(0 0 0 0); }
-  25% { clip-path: inset(20% 0 30% 0); }
-  50% { clip-path: inset(50% 0 10% 0); }
-  75% { clip-path: inset(70% 0 20% 0); }
+  0%,
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+  25% {
+    clip-path: inset(20% 0 30% 0);
+  }
+  50% {
+    clip-path: inset(50% 0 10% 0);
+  }
+  75% {
+    clip-path: inset(70% 0 20% 0);
+  }
 }
 
 @keyframes glitch-2 {
-  0%, 100% { clip-path: inset(0 0 0 0); }
-  25% { clip-path: inset(60% 0 20% 0); }
-  50% { clip-path: inset(10% 0 60% 0); }
-  75% { clip-path: inset(30% 0 40% 0); }
+  0%,
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+  25% {
+    clip-path: inset(60% 0 20% 0);
+  }
+  50% {
+    clip-path: inset(10% 0 60% 0);
+  }
+  75% {
+    clip-path: inset(30% 0 40% 0);
+  }
 }
 
 /* Container fixes */
@@ -459,90 +524,158 @@ main {
   padding: 0 20px;
 }
 
-/* Dungeon Map Responsive Styles */
-.dungeon-map-container {
-  width: 100%;
-  height: 100%;
+/* Experience page specific styles */
+.experience-page .quest-header {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
-.dungeon-map-node {
-  transition: all 0.3s ease;
+.experience-page .quest-difficulty {
+  text-align: right;
 }
 
-.dungeon-map-path {
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.experience-page .quest-detail {
+  margin-top: 20px;
+}
+
+.experience-page .quest-objective,
+.experience-page .quest-equipment,
+.experience-page .quest-rewards,
+.experience-page .quest-features {
+  margin-top: 30px;
+}
+
+.experience-page .quest-expand-indicator {
+  text-align: center;
+  margin-top: 20px;
+  color: var(--pixel-accent);
+  font-size: 1.5rem;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  h1 { 
+  h1 {
     font-size: 1.5rem;
     text-align: center;
   }
-  h2 { 
+  h2 {
     font-size: 1.2rem;
     text-align: center;
   }
-  h3 { 
+  h3 {
     font-size: 1rem;
     text-align: center;
   }
-  
+
   .pixel-button {
-    font-size: 0.6rem;
-    padding: 8px 16px;
+    font-size: 0.5rem;
+    padding: 8px 14px;
     margin: 5px;
+    min-height: 32px;
   }
-  
+
   .game-panel {
     width: 90%;
     margin: 10px auto;
     padding: 20px;
   }
-  
+
   .skill-bar-container {
     margin-bottom: 15px;
   }
-  
+
   .dialog-box {
     padding: 20px;
   }
-  
-  /* Dungeon map mobile adjustments */
-  .dungeon-map-container {
-    padding: 10px;
+
+  /* Experience page responsive adjustments */
+  .experience-page .quest-header {
+    flex-direction: column;
   }
-  
-  .dungeon-map-node {
-    transform: scale(0.9);
+
+  .experience-page .quest-difficulty {
+    text-align: left;
+    margin-top: 10px;
+  }
+
+  .experience-page .company-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .experience-page .date-status {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .experience-page .quest-detail {
+    margin-top: 15px;
+  }
+
+  .experience-page .quest-objective,
+  .experience-page .quest-equipment,
+  .experience-page .quest-rewards,
+  .experience-page .quest-features {
+    margin-top: 20px;
+  }
+
+  .experience-page h4 {
+    font-size: 0.9rem;
+  }
+
+  .skill-badge {
+    padding: 5px 12px;
+    font-size: 0.9rem;
+    margin: 3px;
   }
 }
 
 @media (max-width: 480px) {
-  h1 { font-size: 1.2rem; }
-  h2 { font-size: 1rem; }
-  h3 { font-size: 0.9rem; }
-  
+  h1 {
+    font-size: 1.2rem;
+  }
+  h2 {
+    font-size: 1rem;
+  }
+  h3 {
+    font-size: 0.9rem;
+  }
+
   .game-panel {
     width: 95%;
     padding: 15px;
   }
-  
+
   .pixel-button {
-    font-size: 0.5rem;
-    padding: 6px 12px;
+    font-size: 0.45rem;
+    padding: 8px 12px;
+    min-height: 30px;
   }
-  
-  /* Dungeon map small mobile adjustments */
-  .dungeon-map-container {
-    padding: 5px;
+
+  /* Experience page small screen adjustments */
+  .experience-page {
+    padding: 0 10px;
   }
-  
-  .dungeon-map-node {
-    transform: scale(0.8);
+
+  .experience-page .quest-expand-indicator {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    padding: 10px 0;
+  }
+
+  .experience-page li {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+  }
+
+  .experience-page .skill-badge {
+    font-size: 0.85rem;
+    padding: 5px 10px;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

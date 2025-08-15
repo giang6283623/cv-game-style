@@ -112,7 +112,7 @@ const SkillsPage: React.FC = () => {
             </h2>
             <p
               style={{
-                fontFamily: "VT323, monospace",
+                fontFamily: "Oxanium, sans-serif",
                 fontSize: "1.5rem",
                 color: "#4ecdc4",
               }}
@@ -272,7 +272,7 @@ const SkillsPage: React.FC = () => {
             justifyContent: "center",
             gap: "30px",
             flexWrap: "wrap",
-            fontFamily: "VT323, monospace",
+            fontFamily: "Oxanium, sans-serif",
             fontSize: "1.2rem",
           }}
         >

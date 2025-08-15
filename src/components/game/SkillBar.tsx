@@ -93,7 +93,7 @@ const SkillBar: React.FC<SkillBarProps> = ({
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <span
             style={{
-              fontFamily: 'VT323, monospace',
+              fontFamily: 'Oxanium, sans-serif',
               fontSize: '1rem',
               color: '#ffd93d',
               textTransform: 'uppercase'
@@ -104,7 +104,7 @@ const SkillBar: React.FC<SkillBarProps> = ({
           {showPercentage && (
             <span
               style={{
-                fontFamily: 'VT323, monospace',
+                fontFamily: 'Oxanium, sans-serif',
                 fontSize: '1.2rem',
                 color: '#6bcf7f',
                 minWidth: '45px',
@@ -209,7 +209,7 @@ const SkillBar: React.FC<SkillBarProps> = ({
               right: '5px',
               top: '50%',
               transform: 'translateY(-50%)',
-              fontFamily: 'VT323, monospace',
+              fontFamily: 'Oxanium, sans-serif',
               fontSize: '0.9rem',
               color: '#fff',
               textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)',

@@ -130,7 +130,7 @@ const GameButton: React.FC<GameButtonProps> = ({
           x: ["-100%", "100%"],
         }}
         transition={{
-          duration: 2,
+          duration: 6,
           repeat: Infinity,
           ease: "linear",
         }}

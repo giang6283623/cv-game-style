@@ -1,6 +1,6 @@
 /* Game Style CSS - Pixel Art Theme */
 
-@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Oxanium:wght@200;300;400;500;600;700;800&display=swap");
 
 :root {
   /* Game Color Palette - Classic 2D Game Colors */
@@ -16,7 +16,7 @@
   --pixel-danger: #ff6b6b;
   --pixel-text: #ffffff;
   --pixel-text-secondary: #d1d1e9;
-  --pixel-border: #2ed573; /* Changed from purple to retro green */
+  --pixel-border: rgb(71, 71, 71); /* Changed from purple to retro green */
   --pixel-shadow: rgba(0, 0, 0, 0.6);
   --pixel-earth: #8b4513; /* Classic earth brown */
   --pixel-sky: #3498db; /* Classic sky blue */
@@ -24,7 +24,7 @@
 
   /* UI Colors - Better contrast */
   --ui-panel-bg: rgba(13, 13, 26, 0.95);
-  --ui-panel-border: #2ed573; /* Changed from purple to retro green */
+  --ui-panel-border: rgb(71, 71, 71);
   --ui-button-bg: #ff4757;
   --ui-button-hover: #ff6b7a;
   --ui-button-active: #ee3f55;
@@ -45,7 +45,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: "VT323", monospace;
+  font-family: "Oxanium", sans-serif;
   background: linear-gradient(
     135deg,
     var(--pixel-bg-dark) 0%,
@@ -135,16 +135,25 @@ span {
   letter-spacing: 0.5px;
 }
 
-/* Game Panel Styles */
+/* Game Panel Styles - Enhanced Brick Design */
 .game-panel {
-  background: var(--ui-panel-bg);
-  border: 4px solid var(--ui-panel-border);
+  /* Enhanced multi-layer borders */
+  border: none;
   border-radius: 0;
   padding: 30px;
   margin: 20px auto;
   position: relative;
-  box-shadow: 0 0 0 2px black, 0 0 0 4px var(--ui-panel-border),
-    8px 8px 0 0 rgba(0, 0, 0, 0.5);
+
+  /* Multiple border layers for depth */
+  box-shadow: 
+    /* Outer dark border */ 0 0 0 2px #000000,
+    /* Main stone border */ 0 0 0 6px #3a3a4a,
+    /* Inner highlight */ 0 0 0 8px #5a5a6a,
+    /* Accent glow */ 0 0 0 10px var(--ui-panel-border),
+    /* Outer shadow border */ 0 0 0 12px #000000,
+    /* 3D depth shadow */ 12px 12px 0 0 rgba(0, 0, 0, 0.6),
+    /* Soft outer glow */ 0 0 20px rgba(46, 213, 115, 0.3);
+
   backdrop-filter: blur(5px);
   width: 95%;
   max-width: 1200px;
@@ -153,15 +162,27 @@ span {
 .game-panel::before {
   content: "";
   position: absolute;
-  top: -4px;
-  left: -4px;
-  right: -4px;
-  bottom: -4px;
-  background: var(--pixel-success); /* Single color instead of gradient */
+  top: -12px;
+  left: -12px;
+  right: -12px;
+  bottom: -12px;
+  background: radial-gradient(
+      circle at 20% 20%,
+      rgba(46, 213, 115, 0.6) 0%,
+      rgba(46, 213, 115, 0.3) 30%,
+      transparent 60%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(255, 215, 0, 0.4) 0%,
+      rgba(255, 215, 0, 0.2) 30%,
+      transparent 60%
+    );
   z-index: -1;
   opacity: 0;
   transition: opacity var(--animation-medium);
   animation: borderGlow 3s linear infinite;
+  border-radius: 2px;
 }
 
 @keyframes borderGlow {
@@ -175,7 +196,28 @@ span {
 }
 
 .game-panel:hover::before {
-  opacity: 0.8;
+  opacity: 0.9;
+}
+
+/* Corner decorations for brick panels */
+.game-panel::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+
+  /* Inner brick pattern */
+  background: repeating-linear-gradient(
+    45deg,
+    transparent 0px,
+    transparent 1px,
+    rgba(255, 255, 255, 0.02) 1px,
+    rgba(255, 255, 255, 0.02) 2px
+  );
 }
 
 /* Pixel Button Styles */
@@ -303,7 +345,7 @@ span {
   transform: translateY(-50%);
   color: var(--pixel-accent);
   font-size: 1.5rem;
-  animation: blink 1s infinite;
+  animation: blink 4s infinite;
 }
 
 @keyframes blink {
@@ -324,7 +366,7 @@ span {
   margin: 5px;
   background: var(--pixel-info); /* Single color instead of gradient */
   color: white;
-  font-family: "VT323", monospace;
+  font-family: "Oxanium", sans-serif;
   font-size: 1.2rem;
   text-transform: uppercase;
   position: relative;
@@ -433,13 +475,13 @@ span {
 }
 
 .glitch::before {
-  animation: glitch-1 0.5s infinite;
+  animation: glitch-1 3s infinite;
   color: var(--pixel-primary);
   z-index: -1;
 }
 
 .glitch::after {
-  animation: glitch-2 0.5s infinite;
+  animation: glitch-2 3s infinite;
   color: var(--pixel-info);
   z-index: -2;
 }
