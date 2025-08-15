@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Beam from "./Beam";
+import Fireworks from "./Fireworks";
 import MobileControls from "./MobileControls";
 
 interface PlayableCharacterProps {
@@ -49,6 +50,14 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
       color: string;
       type: string;
       angle: number;
+    }>
+  >([]);
+  const [fireworks, setFireworks] = useState<
+    Array<{
+      id: string;
+      x: number;
+      y: number;
+      color: string;
     }>
   >([]);
   const keysPressed = useRef<Set<string>>(new Set());
@@ -532,9 +541,10 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
       "#81c784", // Light green
       "#64b5f6", // Light blue
     ];
-    
-    const randomColor = beamColors[Math.floor(Math.random() * beamColors.length)];
-    
+
+    const randomColor =
+      beamColors[Math.floor(Math.random() * beamColors.length)];
+
     // Random scatter angle between -20 to +20 degrees
     const scatterAngle = (Math.random() - 0.5) * 40; // -20 to +20 degrees
 
@@ -553,6 +563,21 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
 
   const destroyBeam = (beamId: string) => {
     setBeams((prev) => prev.filter((beam) => beam.id !== beamId));
+  };
+
+  const createFireworks = (x: number, y: number, color: string) => {
+    const fireworksId = `fireworks_${Date.now()}_${Math.random()}`;
+    const newFireworks = {
+      id: fireworksId,
+      x,
+      y,
+      color,
+    };
+    setFireworks((prev) => [...prev, newFireworks]);
+  };
+
+  const destroyFireworks = (fireworksId: string) => {
+    setFireworks((prev) => prev.filter((fw) => fw.id !== fireworksId));
   };
 
   return (
@@ -671,6 +696,19 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
           speed={beam.type === "runThrowing" ? 12 : 8}
           color={beam.color}
           angle={beam.angle}
+          onExplode={createFireworks}
+        />
+      ))}
+
+      {/* Render fireworks explosions */}
+      {fireworks.map((fw) => (
+        <Fireworks
+          key={fw.id}
+          id={fw.id}
+          x={fw.x}
+          y={fw.y}
+          color={fw.color}
+          onDestroy={destroyFireworks}
         />
       ))}
 

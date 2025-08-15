@@ -10,6 +10,7 @@ interface BeamProps {
   speed?: number;
   color?: string;
   angle?: number; // Scatter angle in degrees
+  onExplode?: (x: number, y: number, color: string) => void;
 }
 
 const Beam: React.FC<BeamProps> = ({
@@ -21,21 +22,60 @@ const Beam: React.FC<BeamProps> = ({
   speed = 8,
   color = "#ffeb3b",
   angle = 0,
+  onExplode,
 }) => {
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      onDestroy(id);
-    }, 3000);
-
-    return () => clearTimeout(timeout);
-  }, [id, onDestroy]);
-
-  // Calculate movement based on angle
+  // Calculate movement based on angle and speed
   const angleRad = (angle * Math.PI) / 180;
   const baseDirection = direction === "right" ? 1 : -1;
   const moveDistance = window.innerWidth * 1.2;
   const finalX = baseDirection * moveDistance * Math.cos(angleRad);
   const finalY = -moveDistance * Math.sin(angleRad);
+
+  // Calculate animation duration based on speed (slower for better fireworks)
+  const animationDuration = Math.max(3, 8 / speed); // 3-4 seconds for normal speeds
+
+  useEffect(() => {
+    // Random explosion chance and timing
+    const shouldExplode = Math.random() < 0.8; // Increase chance to 80%
+    // Explosion time should be within beam lifetime (animation duration)
+    const minExplosionTime = 500; // Minimum 0.5 seconds
+    const maxExplosionTime = animationDuration * 1000 * 0.7; // 70% of beam lifetime
+    const explosionTime =
+      minExplosionTime + Math.random() * (maxExplosionTime - minExplosionTime); // Properly bounded
+
+    let explosionTimeout: NodeJS.Timeout | null = null;
+
+    if (shouldExplode && onExplode) {
+      explosionTimeout = setTimeout(() => {
+        // Calculate current position based on actual animation duration
+        const animationDurationMs = animationDuration * 1000;
+        const timeRatio = Math.min(explosionTime / animationDurationMs, 1.0);
+        const currentX = startX + finalX * timeRatio;
+        const currentY = startY + finalY * timeRatio;
+
+        onExplode(currentX, currentY, color);
+        onDestroy(id);
+      }, explosionTime);
+    }
+
+    // Extend beam lifetime if explosion is set to happen after natural destruction
+    const naturalLifetime = animationDuration * 1000;
+    const maxLifetime = shouldExplode
+      ? Math.max(naturalLifetime, explosionTime + 100)
+      : naturalLifetime;
+
+    const destroyTimeout = setTimeout(() => {
+      // Only destroy if not exploding, or if explosion should have happened but didn't
+      if (!shouldExplode) {
+        onDestroy(id);
+      }
+    }, maxLifetime);
+
+    return () => {
+      if (explosionTimeout) clearTimeout(explosionTimeout);
+      clearTimeout(destroyTimeout);
+    };
+  }, []); // Run only once on mount
 
   const beamVariants = {
     initial: {
@@ -48,25 +88,25 @@ const Beam: React.FC<BeamProps> = ({
     animate: {
       x: finalX,
       y: finalY,
-      opacity: [1, 1, 0.8, 0],
-      scale: [0.8, 1, 1.1, 0.9],
+      opacity: [1, 1, 0.8, 0.6, 0.4, 0],
+      scale: [0.8, 1, 1.1, 0.9, 0.8, 0.7],
       rotate: angle,
       transition: {
         x: {
-          duration: 3,
-          ease: "linear",
+          duration: animationDuration,
+          ease: "linear" as const,
         },
         y: {
-          duration: 3,
-          ease: "linear",
+          duration: animationDuration,
+          ease: "linear" as const,
         },
         opacity: {
-          duration: 3,
-          ease: "easeOut",
+          duration: animationDuration,
+          ease: "easeOut" as const,
         },
         scale: {
           duration: 0.3,
-          ease: "easeOut",
+          ease: "easeOut" as const,
         },
         rotate: {
           duration: 0,
@@ -86,7 +126,7 @@ const Beam: React.FC<BeamProps> = ({
       transition: {
         duration: 0.5,
         repeat: Infinity,
-        ease: "easeInOut",
+        ease: "easeInOut" as const,
       },
     },
   };
@@ -105,7 +145,6 @@ const Beam: React.FC<BeamProps> = ({
       variants={beamVariants}
       initial="initial"
       animate="animate"
-      onAnimationComplete={() => onDestroy(id)}
     >
       {/* Glow effect */}
       <motion.div
@@ -120,7 +159,7 @@ const Beam: React.FC<BeamProps> = ({
           filter: "blur(2px)",
         }}
       />
-      
+
       {/* Main beam with gradient blend */}
       <div
         style={{
@@ -133,7 +172,7 @@ const Beam: React.FC<BeamProps> = ({
           filter: "brightness(1.2) saturate(1.3)",
         }}
       />
-      
+
       {/* Sparkle trail */}
       <motion.div
         style={{
