@@ -108,7 +108,7 @@ const HomePage: React.FC = () => {
         </h1>
         <p
           style={{
-            fontFamily: "VT323, monospace",
+            fontFamily: "Oxanium, sans-serif",
             fontSize: "1.5rem",
             color: "#4ecdc4",
           }}

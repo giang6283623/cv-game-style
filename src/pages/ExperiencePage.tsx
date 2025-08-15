@@ -106,7 +106,7 @@ const ExperiencePage: React.FC = () => {
                     <p
                       style={{
                         margin: "5px 0 0 0",
-                        fontFamily: "VT323, monospace",
+                        fontFamily: "Oxanium, sans-serif",
                         color: "#4ecdc4",
                         fontSize: isMobile ? "1.1rem" : "1.3rem",
                       }}
@@ -131,7 +131,7 @@ const ExperiencePage: React.FC = () => {
                       display: "flex",
                       alignItems: "center",
                       gap: "8px",
-                      fontFamily: "VT323, monospace",
+                      fontFamily: "Oxanium, sans-serif",
                       fontSize: isMobile ? "1rem" : "1.2rem",
                     }}
                   >
@@ -216,7 +216,7 @@ const ExperiencePage: React.FC = () => {
                         marginBottom: isMobile ? "8px" : "10px",
                         paddingLeft: isMobile ? "20px" : "30px",
                         position: "relative",
-                        fontFamily: "VT323, monospace",
+                        fontFamily: "Oxanium, sans-serif",
                         fontSize: isMobile ? "1.1rem" : "1.3rem",
                         lineHeight: "1.6",
                       }}
@@ -305,7 +305,7 @@ const ExperiencePage: React.FC = () => {
                           marginBottom: isMobile ? "8px" : "10px",
                           paddingLeft: isMobile ? "20px" : "30px",
                           position: "relative",
-                          fontFamily: "VT323, monospace",
+                          fontFamily: "Oxanium, sans-serif",
                           fontSize: isMobile ? "1.1rem" : "1.3rem",
                           lineHeight: "1.6",
                         }}
@@ -357,7 +357,7 @@ const ExperiencePage: React.FC = () => {
                           <li
                             key={i}
                             style={{
-                              fontFamily: "VT323, monospace",
+                              fontFamily: "Oxanium, sans-serif",
                               fontSize: isMobile ? "1.1rem" : "1.2rem",
                               marginBottom: isMobile ? "3px" : "5px",
                             }}
@@ -384,7 +384,7 @@ const ExperiencePage: React.FC = () => {
                           <li
                             key={i}
                             style={{
-                              fontFamily: "VT323, monospace",
+                              fontFamily: "Oxanium, sans-serif",
                               fontSize: isMobile ? "1.1rem" : "1.2rem",
                               marginBottom: isMobile ? "3px" : "5px",
                             }}

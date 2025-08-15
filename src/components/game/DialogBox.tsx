@@ -110,7 +110,7 @@ const DialogBox: React.FC<DialogBoxProps> = ({
         <div style={{ flex: 1 }}>
           <p
             style={{
-              fontFamily: 'VT323, monospace',
+              fontFamily: 'Oxanium, sans-serif',
               fontSize: '1.4rem',
               lineHeight: '1.6',
               color: '#ffffff',

@@ -162,7 +162,7 @@ const GameLayout: React.FC<GameLayoutProps> = ({ children }) => {
         style={{
           background:
             "linear-gradient(180deg, rgba(26, 26, 46, 0.98) 0%, rgba(22, 33, 62, 0.95) 100%)",
-          borderBottom: "4px solid #2ed573",
+          borderBottom: "4px solid rgb(4, 4, 44)",
           padding: isMobile ? "10px" : "20px",
           position: "sticky",
           top: 0,
@@ -171,7 +171,7 @@ const GameLayout: React.FC<GameLayoutProps> = ({ children }) => {
           overflow: "hidden",
         }}
       >
-        <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        <div style={{}}>
           {/* Top HUD */}
           <div
             style={{
@@ -212,7 +212,7 @@ const GameLayout: React.FC<GameLayoutProps> = ({ children }) => {
                 </h1>
                 <p
                   style={{
-                    fontFamily: "VT323, monospace",
+                    fontFamily: "Oxanium, sans-serif",
                     fontSize: isMobile ? "0.9rem" : "1.2rem",
                     margin: "2px 0 0 0",
                     color: "#4ecdc4",
@@ -248,7 +248,7 @@ const GameLayout: React.FC<GameLayoutProps> = ({ children }) => {
                   <FaHeart color="#ff6b6b" size={isMobile ? 12 : 16} />
                   <span
                     style={{
-                      fontFamily: "VT323, monospace",
+                      fontFamily: "Oxanium, sans-serif",
                       color: "#fff",
                       fontSize: isMobile ? "0.9rem" : "1.2rem",
                     }}
@@ -290,7 +290,7 @@ const GameLayout: React.FC<GameLayoutProps> = ({ children }) => {
                   <FaStar color="#ffd93d" size={isMobile ? 12 : 16} />
                   <span
                     style={{
-                      fontFamily: "VT323, monospace",
+                      fontFamily: "Oxanium, sans-serif",
                       color: "#fff",
                       fontSize: isMobile ? "0.9rem" : "1.2rem",
                     }}
@@ -511,7 +511,7 @@ const GameLayout: React.FC<GameLayoutProps> = ({ children }) => {
       >
         <p
           style={{
-            fontFamily: "VT323, monospace",
+            fontFamily: "Oxanium, sans-serif",
             fontSize: "1.2rem",
             color: "#b8b8d1",
             margin: 0,

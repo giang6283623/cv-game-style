@@ -612,7 +612,7 @@ const DungeonMap: React.FC<DungeonMapProps> = ({ onNodeClick, onClose }) => {
                       <p
                         style={{
                           margin: 0,
-                          fontFamily: "VT323, monospace",
+                          fontFamily: "Oxanium, sans-serif",
                           fontSize: isMobile ? "0.9rem" : "1.2rem",
                           color: "#fff",
                           textShadow: "1px 1px 2px rgba(0,0,0,0.8)",

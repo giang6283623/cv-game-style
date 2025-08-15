@@ -184,7 +184,7 @@ const ContactPage: React.FC = () => {
                         <p
                           style={{
                             margin: 0,
-                            fontFamily: "VT323, monospace",
+                            fontFamily: "Oxanium, sans-serif",
                             fontSize: "1.2rem",
                             color: "#fff",
                           }}
@@ -231,7 +231,7 @@ const ContactPage: React.FC = () => {
                       <p
                         style={{
                           margin: 0,
-                          fontFamily: "VT323, monospace",
+                          fontFamily: "Oxanium, sans-serif",
                           fontSize: "1.2rem",
                           color: "#fff",
                         }}
@@ -293,7 +293,7 @@ const ContactPage: React.FC = () => {
                   background: "rgba(0, 0, 0, 0.5)",
                   border: "2px solid #533483",
                   color: "#fff",
-                  fontFamily: "VT323, monospace",
+                  fontFamily: "Oxanium, sans-serif",
                   fontSize: "1.3rem",
                   outline: "none",
                 }}
@@ -327,7 +327,7 @@ const ContactPage: React.FC = () => {
                   background: "rgba(0, 0, 0, 0.5)",
                   border: "2px solid #533483",
                   color: "#fff",
-                  fontFamily: "VT323, monospace",
+                  fontFamily: "Oxanium, sans-serif",
                   fontSize: "1.3rem",
                   outline: "none",
                 }}
@@ -361,7 +361,7 @@ const ContactPage: React.FC = () => {
                   background: "rgba(0, 0, 0, 0.5)",
                   border: "2px solid #533483",
                   color: "#fff",
-                  fontFamily: "VT323, monospace",
+                  fontFamily: "Oxanium, sans-serif",
                   fontSize: "1.3rem",
                   outline: "none",
                   resize: "vertical",
@@ -405,7 +405,7 @@ const ContactPage: React.FC = () => {
             >
               <p
                 style={{
-                  fontFamily: "VT323, monospace",
+                  fontFamily: "Oxanium, sans-serif",
                   fontSize: "1.3rem",
                   color: "#6bcf7f",
                   margin: 0,
@@ -443,7 +443,7 @@ const ContactPage: React.FC = () => {
         </p>
         <p
           style={{
-            fontFamily: "VT323, monospace",
+            fontFamily: "Oxanium, sans-serif",
             fontSize: "1.2rem",
             color: "#b8b8d1",
             marginTop: "10px",

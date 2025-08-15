@@ -138,7 +138,7 @@ const ControlsHelp: React.FC = () => {
               {controls.map((section) => (
                 <div key={section.category}>
                   <h4 style={{
-                    fontFamily: 'VT323, monospace',
+                    fontFamily: 'Oxanium, sans-serif',
                     fontSize: '1.2rem',
                     color: section.color,
                     marginBottom: '8px',
@@ -159,7 +159,7 @@ const ControlsHelp: React.FC = () => {
                           display: 'flex',
                           alignItems: 'center',
                           gap: '10px',
-                          fontFamily: 'VT323, monospace',
+                          fontFamily: 'Oxanium, sans-serif',
                           fontSize: '1rem',
                           flexWrap: 'wrap'
                         }}
@@ -197,7 +197,7 @@ const ControlsHelp: React.FC = () => {
               border: '1px solid #ffd93d',
               borderRadius: '4px',
               textAlign: 'center',
-              fontFamily: 'VT323, monospace',
+              fontFamily: 'Oxanium, sans-serif',
               fontSize: '0.9rem',
               color: '#ffd93d'
             }}>

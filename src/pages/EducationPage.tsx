@@ -76,7 +76,7 @@ const EducationPage: React.FC = () => {
             <h3 style={{ 
               color: '#4ecdc4',
               marginBottom: '10px',
-              fontFamily: 'VT323, monospace',
+              fontFamily: 'Oxanium, sans-serif',
               fontSize: '1.5rem'
             }}>
               {edu.field}
@@ -94,7 +94,7 @@ const EducationPage: React.FC = () => {
                 display: 'flex', 
                 alignItems: 'center', 
                 gap: '8px',
-                fontFamily: 'VT323, monospace',
+                fontFamily: 'Oxanium, sans-serif',
                 fontSize: '1.3rem',
                 color: '#b8b8d1'
               }}>
@@ -105,7 +105,7 @@ const EducationPage: React.FC = () => {
                 display: 'flex', 
                 alignItems: 'center', 
                 gap: '8px',
-                fontFamily: 'VT323, monospace',
+                fontFamily: 'Oxanium, sans-serif',
                 fontSize: '1.3rem',
                 color: '#b8b8d1'
               }}>
@@ -121,7 +121,7 @@ const EducationPage: React.FC = () => {
               borderRadius: '5px'
             }}>
               <p style={{ 
-                fontFamily: 'VT323, monospace',
+                fontFamily: 'Oxanium, sans-serif',
                 fontSize: '1.3rem',
                 color: '#6bcf7f',
                 margin: 0
@@ -153,7 +153,7 @@ const EducationPage: React.FC = () => {
             📚 KNOWLEDGE GAINED: +1000 XP
           </p>
           <p style={{ 
-            fontFamily: 'VT323, monospace',
+            fontFamily: 'Oxanium, sans-serif',
             fontSize: '1.2rem',
             color: '#b8b8d1',
             marginTop: '10px'
