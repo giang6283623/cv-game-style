@@ -52,24 +52,29 @@ const MobileControls: React.FC<MobileControlsProps> = ({
           onMove(dir, false);
         }
       });
-      return new Set();
+      // Keep shift state even when D-pad is hidden since it's toggle-based
+      const newSet = new Set<string>();
+      if (prevSet.has("shift")) {
+        newSet.add("shift");
+      }
+      return newSet;
     });
   }, [dpadHidden, onMove]);
 
   if (!isVisible) return null;
 
-  const handleTouchStart = (direction: string) => (e: React.TouchEvent) => {
+  const handlePointerDown = (direction: string) => (e: React.PointerEvent) => {
     e.preventDefault();
-    setActiveButtons((prev) => new Set(prev).add(direction));
+    setActiveButtons((prev) => new Set<string>(prev).add(direction));
     if (["up", "down", "left", "right"].includes(direction)) {
       onMove(direction, true);
     }
   };
 
-  const handleTouchEnd = (direction: string) => (e: React.TouchEvent) => {
+  const handlePointerUp = (direction: string) => (e: React.PointerEvent) => {
     e.preventDefault();
     setActiveButtons((prev) => {
-      const newSet = new Set(prev);
+      const newSet = new Set<string>(prev);
       newSet.delete(direction);
       return newSet;
     });
@@ -78,14 +83,37 @@ const MobileControls: React.FC<MobileControlsProps> = ({
     }
   };
 
-  const handleAction = (action: string) => (e: React.TouchEvent) => {
+  const handleAction = (action: string) => (e: React.PointerEvent) => {
     e.preventDefault();
+    e.stopPropagation(); // Prevent drag behavior when touching action buttons
     onAction(action);
   };
 
-  const handleJump = (e: React.TouchEvent) => {
+  const handleJump = (e: React.PointerEvent) => {
     e.preventDefault();
+    e.stopPropagation(); // Prevent drag behavior when touching jump button
     onJump();
+  };
+
+  // Toggle handler specifically for the shift/running button
+  const handleToggleShift = (e: React.PointerEvent) => {
+    e.preventDefault();
+    e.stopPropagation(); // Prevent drag behavior when touching run button
+    setActiveButtons((prev) => {
+      const newSet = new Set<string>(prev);
+      const isCurrentlyRunning = newSet.has("shift");
+
+      if (isCurrentlyRunning) {
+        // Currently running - turn OFF
+        newSet.delete("shift");
+        onMove("shift", false); // Notify parent that shift is released
+      } else {
+        // Currently not running - turn ON
+        newSet.add("shift");
+        onMove("shift", true); // Notify parent that shift is pressed
+      }
+      return newSet;
+    });
   };
 
   const toggleControls = (
@@ -150,6 +178,8 @@ const MobileControls: React.FC<MobileControlsProps> = ({
         <motion.div
           drag="x"
           dragMomentum={false}
+          dragConstraints={{ left: -100, right: 0 }}
+          dragElastic={0.1}
           onDragEnd={(_e, info) => {
             if (info.offset.x < -60) {
               setDpadHidden(true);
@@ -164,8 +194,9 @@ const MobileControls: React.FC<MobileControlsProps> = ({
         >
           {/* Up */}
           <div
-            onTouchStart={handleTouchStart("up")}
-            onTouchEnd={handleTouchEnd("up")}
+            onPointerDown={handlePointerDown("up")}
+            onPointerUp={handlePointerUp("up")}
+            onPointerLeave={handlePointerUp("up")}
             style={{
               ...buttonStyle(activeButtons.has("up")),
               position: "absolute",
@@ -178,8 +209,9 @@ const MobileControls: React.FC<MobileControlsProps> = ({
 
           {/* Down */}
           <div
-            onTouchStart={handleTouchStart("down")}
-            onTouchEnd={handleTouchEnd("down")}
+            onPointerDown={handlePointerDown("down")}
+            onPointerUp={handlePointerUp("down")}
+            onPointerLeave={handlePointerUp("down")}
             style={{
               ...buttonStyle(activeButtons.has("down")),
               position: "absolute",
@@ -192,8 +224,9 @@ const MobileControls: React.FC<MobileControlsProps> = ({
 
           {/* Left */}
           <div
-            onTouchStart={handleTouchStart("left")}
-            onTouchEnd={handleTouchEnd("left")}
+            onPointerDown={handlePointerDown("left")}
+            onPointerUp={handlePointerUp("left")}
+            onPointerLeave={handlePointerUp("left")}
             style={{
               ...buttonStyle(activeButtons.has("left")),
               position: "absolute",
@@ -206,8 +239,9 @@ const MobileControls: React.FC<MobileControlsProps> = ({
 
           {/* Right */}
           <div
-            onTouchStart={handleTouchStart("right")}
-            onTouchEnd={handleTouchEnd("right")}
+            onPointerDown={handlePointerDown("right")}
+            onPointerUp={handlePointerUp("right")}
+            onPointerLeave={handlePointerUp("right")}
             style={{
               ...buttonStyle(activeButtons.has("right")),
               position: "absolute",
@@ -218,19 +252,29 @@ const MobileControls: React.FC<MobileControlsProps> = ({
             <FaArrowRight />
           </div>
 
-          {/* Center (Run modifier) */}
+          {/* Center (Run modifier) - Toggle: Tap once to turn ON, tap again to turn OFF */}
           <div
-            onTouchStart={handleTouchStart("shift")}
-            onTouchEnd={handleTouchEnd("shift")}
+            onPointerDown={handleToggleShift}
             style={{
               ...buttonStyle(activeButtons.has("shift")),
               position: "absolute",
               top: "50px",
               left: "50px",
               background: activeButtons.has("shift")
-                ? "rgba(255, 216, 61, 0.8)"
+                ? "rgba(255, 216, 61, 0.9)" // Brighter when active
                 : "rgba(13, 13, 26, 0.8)",
-              border: "2px solid #ffd93d",
+              border: activeButtons.has("shift")
+                ? "3px solid #ffd93d" // Thicker border when active
+                : "2px solid #ffd93d",
+              // Enhanced visual feedback for toggle state
+              boxShadow: activeButtons.has("shift")
+                ? "0 0 20px rgba(255, 216, 61, 0.8), inset 0 0 15px rgba(255, 216, 61, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.3)"
+                : "0 2px 4px rgba(0, 0, 0, 0.3)",
+              // Slight scale when active to show it's "locked on"
+              transform: activeButtons.has("shift")
+                ? "scale(1.05)"
+                : "scale(1.0)",
+              transition: "all 0.2s ease",
             }}
           >
             <FaRunning />
@@ -243,6 +287,8 @@ const MobileControls: React.FC<MobileControlsProps> = ({
         <motion.div
           drag="x"
           dragMomentum={false}
+          dragConstraints={{ left: 0, right: 100 }}
+          dragElastic={0.1}
           onDragEnd={(_e, info) => {
             if (info.offset.x > 60) {
               setActionsHidden(true);
@@ -257,7 +303,7 @@ const MobileControls: React.FC<MobileControlsProps> = ({
         >
           {/* Jump */}
           <div
-            onTouchStart={handleJump}
+            onPointerDown={handleJump}
             style={{
               ...actionButtonStyle("#4ecdc4", false),
               gridColumn: "span 3",
@@ -269,7 +315,7 @@ const MobileControls: React.FC<MobileControlsProps> = ({
 
           {/* Attack */}
           <div
-            onTouchStart={handleAction("attack")}
+            onPointerDown={handleAction("attack")}
             style={actionButtonStyle("#ff4757", false)}
           >
             <GiSwordSlice />
@@ -277,7 +323,7 @@ const MobileControls: React.FC<MobileControlsProps> = ({
 
           {/* Kick */}
           <div
-            onTouchStart={handleAction("kick")}
+            onPointerDown={handleAction("kick")}
             style={actionButtonStyle("#ff6b7a", false)}
           >
             <FaFistRaised />
@@ -285,7 +331,7 @@ const MobileControls: React.FC<MobileControlsProps> = ({
 
           {/* Special */}
           <div
-            onTouchStart={handleAction("special")}
+            onPointerDown={handleAction("special")}
             style={actionButtonStyle("#ffd93d", false)}
           >
             <GiPowerLightning />

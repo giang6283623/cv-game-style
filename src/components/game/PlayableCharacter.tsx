@@ -388,16 +388,16 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
   // Mobile control handlers
   const handleMobileMove = (direction: string, pressed: boolean) => {
     const keyMap: { [key: string]: string } = {
-      'up': 'w',
-      'down': 's',
-      'left': 'a',
-      'right': 'd',
-      'shift': 'shift'
+      up: "w",
+      down: "s",
+      left: "a",
+      right: "d",
+      shift: "shift",
     };
-    
+
     const key = keyMap[direction];
     if (!key) return;
-    
+
     if (pressed) {
       mobileKeysPressed.current.add(key);
       keysPressed.current.add(key);
@@ -408,41 +408,41 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
   };
 
   const handleMobileAction = (action: string) => {
-    if (action === 'attack' && !isAttacking) {
+    if (action === "attack" && !isAttacking) {
       setIsAttacking(true);
-      const running = keysPressed.current.has('shift');
-      
+      const running = keysPressed.current.has("shift");
+
       if (isJumping) {
-        setAction('airSlashing');
+        setAction("airSlashing");
       } else if (running && isMoving.current) {
-        setAction('runSlashing');
+        setAction("runSlashing");
       } else {
-        setAction('slashing');
+        setAction("slashing");
       }
-      
+
       setTimeout(() => {
         setIsAttacking(false);
         updateActionBasedOnState();
       }, 600);
-    } else if (action === 'kick' && !isAttacking) {
+    } else if (action === "kick" && !isAttacking) {
       setIsAttacking(true);
-      setAction('kicking');
+      setAction("kicking");
       setTimeout(() => {
         setIsAttacking(false);
         updateActionBasedOnState();
       }, 600);
-    } else if (action === 'special' && !isAttacking) {
+    } else if (action === "special" && !isAttacking) {
       setIsAttacking(true);
-      const running = keysPressed.current.has('shift');
-      
+      const running = keysPressed.current.has("shift");
+
       if (isJumping) {
-        setAction('airThrowing');
+        setAction("airThrowing");
       } else if (running && isMoving.current) {
-        setAction('runThrowing');
+        setAction("runThrowing");
       } else {
-        setAction('throwing');
+        setAction("throwing");
       }
-      
+
       setTimeout(() => {
         setIsAttacking(false);
         updateActionBasedOnState();
@@ -453,17 +453,17 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
   const handleMobileJump = () => {
     if (!isJumping) {
       setIsJumping(true);
-      setAction('jumpStart');
-      
+      setAction("jumpStart");
+
       setTimeout(() => {
         if (isJumping) {
-          setAction('jumpLoop');
+          setAction("jumpLoop");
         }
       }, 300);
-      
+
       setTimeout(() => {
         setIsJumping(false);
-        setAction('falling');
+        setAction("falling");
         setTimeout(() => {
           updateActionBasedOnState();
         }, 200);
@@ -473,16 +473,17 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
 
   const updateActionBasedOnState = () => {
     if (isAttacking || isJumping) return;
-    
-    const running = keysPressed.current.has('shift');
+
+    const running = keysPressed.current.has("shift");
     if (isMoving.current) {
-      setAction(running ? 'running' : 'walking');
+      setAction(running ? "running" : "walking");
     } else {
-      setAction('idle');
+      setAction("idle");
     }
   };
 
   return (
+    <>
     <motion.div
       className="playable-character"
       style={{
@@ -583,14 +584,15 @@ const PlayableCharacter: React.FC<PlayableCharacterProps> = ({
           GIANG
         </span>
       </div>
-      
-      {/* Mobile Controls */}
-      <MobileControls
-        onMove={handleMobileMove}
-        onAction={handleMobileAction}
-        onJump={handleMobileJump}
-      />
     </motion.div>
+
+    {/* Mobile Controls - Positioned independently of character */}
+    <MobileControls
+      onMove={handleMobileMove}
+      onAction={handleMobileAction}
+      onJump={handleMobileJump}
+    />
+  </>
   );
 };
 

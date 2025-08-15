@@ -42,7 +42,6 @@ const DungeonMap: React.FC<DungeonMapProps> = ({ onNodeClick, onClose }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [mounted, setMounted] = useState(false);
 
-
   // Better positioned nodes for cleaner connections
   const mapNodes: MapNode[] = [
     {
@@ -179,7 +178,6 @@ const DungeonMap: React.FC<DungeonMapProps> = ({ onNodeClick, onClose }) => {
     return () => clearTimeout(timer);
   }, []);
 
-
   // Memoize unlocked state for performance
   const unlockedNodesSet = useMemo(
     () => new Set(unlockedNodes),
@@ -284,22 +282,26 @@ const DungeonMap: React.FC<DungeonMapProps> = ({ onNodeClick, onClose }) => {
             onMouseEnter={(e) => {
               const target = e.currentTarget;
               target.style.transform = "translateY(-2px)";
-              target.style.boxShadow = "0 5px 0 #CC2E44, 0 6px 8px rgba(0,0,0,0.4)";
+              target.style.boxShadow =
+                "0 5px 0 #CC2E44, 0 6px 8px rgba(0,0,0,0.4)";
             }}
             onMouseLeave={(e) => {
               const target = e.currentTarget;
               target.style.transform = "translateY(0)";
-              target.style.boxShadow = "0 3px 0 #CC2E44, 0 4px 6px rgba(0,0,0,0.3)";
+              target.style.boxShadow =
+                "0 3px 0 #CC2E44, 0 4px 6px rgba(0,0,0,0.3)";
             }}
             onMouseDown={(e) => {
               const target = e.currentTarget;
               target.style.transform = "translateY(2px)";
-              target.style.boxShadow = "0 1px 0 #CC2E44, 0 2px 3px rgba(0,0,0,0.3)";
+              target.style.boxShadow =
+                "0 1px 0 #CC2E44, 0 2px 3px rgba(0,0,0,0.3)";
             }}
             onMouseUp={(e) => {
               const target = e.currentTarget;
               target.style.transform = "translateY(-2px)";
-              target.style.boxShadow = "0 5px 0 #CC2E44, 0 6px 8px rgba(0,0,0,0.4)";
+              target.style.boxShadow =
+                "0 5px 0 #CC2E44, 0 6px 8px rgba(0,0,0,0.4)";
             }}
             onClick={onClose}
           >
@@ -401,7 +403,6 @@ const DungeonMap: React.FC<DungeonMapProps> = ({ onNodeClick, onClose }) => {
           const stars = nodeStars[node.id] || node.stars;
           const isHovered = hoveredNode === node.id;
           const isTooltipVisible = (isHovered || isActive) && isUnlocked;
-
 
           // Special handling for the Contact node to ensure it works properly
           const isContactNode = node.id === "contact";
@@ -577,15 +578,15 @@ const DungeonMap: React.FC<DungeonMapProps> = ({ onNodeClick, onClose }) => {
                       exit={{ opacity: 0, scale: 0.8 }}
                       style={{
                         position: "absolute",
-                        left: isMobile ? "60px" : "80px", // Position to the right of the node
-                        top: isMobile ? "-20px" : "-25px", // Position near the top
+                        left: isMobile ? "80px" : "100px", // Position to the right of the node
+                        top: isMobile ? "10px" : "10px", // Position near the top
                         background: "rgba(0, 0, 0, 0.95)",
                         border: `2px solid ${node.color}`,
                         borderRadius: "6px",
-                        padding: isMobile ? "8px 12px" : "10px 15px",
+                        padding: isMobile ? "2px 4px" : "10px 15px",
                         width: "max-content",
-                        maxWidth: isMobile ? "180px" : "250px",
-                        minWidth: "120px",
+                        maxWidth: isMobile ? "120px" : "250px",
+                        minWidth: "60px",
                         whiteSpace: "normal",
                         wordBreak: "break-word",
                         pointerEvents: "none",
